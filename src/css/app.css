@@ -1,1 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* app global css */
+:root {
+  --q-primary: #1e3b77;
+  --q-secondary: #5fc6ff;
+  --q-accent: #3c6db2;
+  --q-positive: #21ba45;
+  --q-negative: #c10015;
+  --q-info: #31ccec;
+  --q-warning: #f2c037;
+  --q-black: #1d1d1d;
+  --q-white: #ffffff;
+  --q-grey: #757575;
+}
+
+:root {
+  --q-size-xs: 0;
+  --q-size-sm: 600px;
+  --q-size-md: 1024px;
+  --q-size-lg: 1440px;
+  --q-size-xl: 1920px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0px 20px;
+}
+
+.header-source button {
+  margin-left: 10px;
+}
+
+.header h5 {
+  color: var(--q-primary);
+  margin: 0;
+  font-weight: bold;
+  font-size: 35px;
+}
+
+.header input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+.add-button {
+  padding: 10px 20px;
+  background-color: var(--q-primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+  background-color: var(--q-accent);
+}
+
+.custom-notify {
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    row-gap: 5px;
+  }
+
+  .header-source {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 5px;
+  }
+}

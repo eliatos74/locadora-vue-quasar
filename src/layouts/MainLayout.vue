@@ -1,40 +1,43 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <q-header class="header-css">
+      <q-toolbar class="flex justify-between">
         <q-btn
           flat
           dense
           round
+          size="lg"
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          flat
+          dense
+          round
+          size="lg"
+          icon="logout"
+          aria-label="logout"
+          @click="logoutClick"
+        />
       </q-toolbar>
+      <div class="linha"></div>
     </q-header>
-
     <q-drawer
+      style="transform: translateX(0px); background-color: var(--q-primary)"
       v-model="leftDrawerOpen"
       show-if-above
-      bordered
+      :width="270"
     >
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+        <div class="logo">
+          <img src="/src/assets/logo.svg" alt="" />
+        </div>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
+        <MenuSidebar
+          v-for="item in sidebarItens"
+          :key="item.title"
+          v-bind="item"
         />
       </q-list>
     </q-drawer>
@@ -46,61 +49,89 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { onMounted, ref } from 'vue';
+
+import MenuSidebar from 'src/components/MenuSidebar.vue';
+import { useRouter } from 'vue-router';
+
+import { UserAuth } from '../api/UserAuthUser';
 
 defineOptions({
-  name: 'MainLayout'
+  name: 'MainLayout',
 });
 
-const linksList: EssentialLinkProps[] = [
+const sidebarItens = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Dashboard',
+    icon: 'src/assets/view-dashboard.svg',
+    page: 'dashboard',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Alugueis',
+    icon: 'src/assets/book-plus-multiple.svg',
+    page: 'rents',
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'Livros',
+    icon: 'src/assets/book.svg',
+    page: 'books',
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: 'Editoras',
+    icon: 'src/assets/book-edit.svg',
+    page: 'publishers',
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    title: 'Locatários',
+    icon: 'src/assets/badge-account.svg',
+    page: 'tenants',
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
+    title: 'Usuários',
+    icon: 'src/assets/account-group.svg',
+    page: 'users',
   },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
 ];
 
 const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+
+onMounted(() => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    router.push('/login');
+  }
+});
+
+const router = useRouter();
+
+function logoutClick() {
+  UserAuth.logout();
+  router.replace('/login');
+}
 </script>
+
+<style scoped>
+.header-css {
+  padding: 20px;
+  background-color: var(--q-white);
+  color: var(--q-primary);
+}
+
+.linha {
+  margin-top: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.logo {
+  display: flex;
+  padding: 20px 20px 20px 50px;
+}
+
+.logo img {
+  width: 150px;
+}
+</style>
