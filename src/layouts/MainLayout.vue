@@ -54,7 +54,7 @@ import { onMounted, ref } from 'vue';
 import MenuSidebar from 'src/components/MenuSidebar.vue';
 import { useRouter } from 'vue-router';
 
-import { UserAuth } from '../api/UserAuthUser';
+import { UserAuth } from '../api/UserAuthUserApi';
 
 defineOptions({
   name: 'MainLayout',

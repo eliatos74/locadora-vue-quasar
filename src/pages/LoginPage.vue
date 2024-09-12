@@ -9,6 +9,7 @@
         <div class="input-group">
           <label for="username">Nome de Usuário</label>
           <input
+            required
             name="username"
             placeholder="Digite seu nome de usuário"
             v-model="formData.username"
@@ -17,6 +18,7 @@
         <div class="input-group">
           <label for="password">Senha</label>
           <input
+            required
             type="password"
             name="password"
             placeholder="Digite sua senha"
@@ -36,7 +38,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 
-import { UserAuth } from '../api/UserAuthUser';
+import { UserAuth } from '../api/UserAuthUserApi';
 import { AuthLogin } from '../interfaces/Auth.interface';
 
 import { NotifyMessage } from '../helpers/Notify';

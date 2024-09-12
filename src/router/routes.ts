@@ -6,15 +6,30 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'dashboard', component: () => import('pages/DashboardPage.vue') },
-      { path: 'rents', component: () => import('pages/RentsPage.vue') },
-      { path: 'books', component: () => import('pages/BooksPage.vue') },
+      {
+        path: 'dashboard',
+        component: () => import('src/pages/dashboards/DashboardPage.vue'),
+      },
+      {
+        path: 'rents',
+        component: () => import('src/pages/rents/RentsPage.vue'),
+      },
+      {
+        path: 'books',
+        component: () => import('src/pages/books/BooksPage.vue'),
+      },
       {
         path: 'publishers',
-        component: () => import('pages/PublishersPage.vue'),
+        component: () => import('src/pages/publishers/PublishersPage.vue'),
       },
-      { path: 'tenants', component: () => import('pages/TenantsPage.vue') },
-      { path: 'users', component: () => import('pages/UsersPage.vue') },
+      {
+        path: 'tenants',
+        component: () => import('src/pages/tenants/TenantsPage.vue'),
+      },
+      {
+        path: 'users',
+        component: () => import('src/pages/users/UsersPage.vue'),
+      },
     ],
   },
   {

@@ -1,10 +1,8 @@
-export interface Book {
-  id: number;
+export interface Publisher {
   name: string;
-  author: string;
-  totalQuantity: number;
-  availableQuantity: number;
-  inUseQuantity: number;
+  email: string;
+  telephone: string;
+  site: string;
 }
 
 export interface Parameters {
