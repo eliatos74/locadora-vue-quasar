@@ -2,45 +2,50 @@
   <DialogBase
     v-model="modal"
     title="Cadastrar Editora"
+    :isFormValid="formValid"
     @close="closeModal"
-    @confirme="confirmModal"
+    @confirm="submitForm"
   >
     <q-form>
       <div class="input-group-css">
-        <label for="Nome do livro">Nome da editora</label>
+        <label>Nome da editora</label>
         <q-input
           v-model="publisher.name"
           placeholder="Digite o nome da editora"
           dense
           outlined
+          :rules="[(val) => !!val || 'Campo obrigatório']"
         />
       </div>
       <div class="input-group-css">
-        <label for="Nome do livro">Email</label>
+        <label>Email</label>
         <q-input
           v-model="publisher.email"
           placeholder="Email da editora"
           dense
           outlined
+          :rules="[(val) => !!val || 'Campo obrigatório']"
         />
       </div>
       <div class="input-group-css">
-        <label for="Nome do livro">Telefone</label>
+        <label>Telefone</label>
         <q-input
           v-model="publisher.telephone"
           placeholder="Telefone"
           dense
           outlined
-          mask="(##)#####-####"
+          mask="(##) ####-####"
+          :rules="[(val) => !!val || 'Campo obrigatório']"
         />
       </div>
       <div class="input-group-css">
-        <label for="Nome do livro">Site</label>
+        <label>Site</label>
         <q-input
           v-model="publisher.site"
           placeholder="Link do site"
           dense
           outlined
+          :rules="[(val) => !!val || 'Campo obrigatório']"
         />
       </div>
     </q-form>
@@ -50,7 +55,7 @@
 <script setup lang="ts">
 import DialogBase from 'components/DialogBase.vue';
 import { Publisher } from '../../../interfaces/Publishers.interface';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
 const modal = defineModel({
   default: false,
@@ -70,12 +75,28 @@ function resetForm() {
     (publisher.site = '');
 }
 
+const formValid = computed(() => {
+  return (
+    !!publisher.name &&
+    !!publisher.email &&
+    !!publisher.telephone &&
+    !!publisher.site
+  );
+});
+
 function closeModal() {
   resetForm();
 }
 
-function confirmModal() {
-  console.log(publisher);
+const emit = defineEmits<{
+  (e: 'submit', publisher: Publisher): void;
+}>();
+
+function submitForm() {
+  if (formValid.value) {
+    emit('submit', publisher);
+    resetForm();
+  }
 }
 </script>
 

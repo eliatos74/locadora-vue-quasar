@@ -43,7 +43,7 @@
       </q-table>
     </div>
   </q-page>
-  <DialoCreatePublisher v-model="modal" />
+  <DialoCreatePublisher v-model="modal" @submit="createPublisher" />
 </template>
 
 <script setup lang="ts">
@@ -53,7 +53,7 @@ import { Publisher, Parameters } from '../../interfaces/Publishers.interface';
 
 import { PublisherApi } from '../../api/PublisherApi';
 
-import DialoCreatePublisher from './components/DialoCreatePublisher.vue';
+import DialoCreatePublisher from './components/DialogCreatePublisher.vue';
 
 const textSearch = ref<string>('');
 
@@ -109,13 +109,23 @@ const request: Parameters = {
   direction: 'ASC',
 };
 
+function showModalCreate() {
+  modal.value = true;
+}
+
 async function getPublishers() {
   const response = await PublisherApi.getPublishersList(request);
   publishers.value = response;
 }
 
-function showModalCreate() {
-  modal.value = true;
+async function createPublisher(publisher: Publisher) {
+  try {
+    const response = await PublisherApi.createPublisher(publisher);
+    console.log(response);
+    getPublishers();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function searchPublisher() {

@@ -35,6 +35,8 @@
           color="primary"
           style="text-transform: none; padding: 0px 15px"
           @click="confirmModal"
+          v-close-popup
+          :disable="!isFormValid"
         />
       </q-card-actions>
     </q-card>
@@ -48,11 +50,12 @@ const modal = defineModel({
 
 defineProps<{
   title: string;
+  isFormValid: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'confirme'): void;
+  (e: 'confirm'): void;
 }>();
 
 function closeModal() {
@@ -60,7 +63,7 @@ function closeModal() {
 }
 
 function confirmModal() {
-  emit('confirme');
+  emit('confirm');
 }
 </script>
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Parameters } from '../interfaces/Publishers.interface';
+import { Publisher, Parameters } from './../interfaces/Publishers.interface';
 
 const PublisherApi = {
   async getPublishersList(request: Parameters) {
@@ -19,7 +19,10 @@ const PublisherApi = {
     const response = await axios.get(`publisher/${id}`);
     return response.data;
   },
-  createPublisher() {},
+  async createPublisher(publisher: Publisher) {
+    const response = await axios.post('publisher', publisher);
+    return response;
+  },
   updatePublisher() {},
   deletePublisher() {},
 };
