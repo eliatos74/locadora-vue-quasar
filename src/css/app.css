@@ -73,7 +73,7 @@ body {
 
 .custom-notify {
   margin-right: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 600px) {

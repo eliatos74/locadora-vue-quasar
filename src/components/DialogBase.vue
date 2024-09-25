@@ -8,14 +8,7 @@
         <div class="col-grow text-center text-h6" style="font-weight: bold">
           {{ title }}
         </div>
-        <q-btn
-          color="primary"
-          icon="close"
-          dense
-          round
-          v-close-popup
-          @click="closeModal"
-        />
+        <q-btn color="primary" icon="close" dense round v-close-popup />
       </q-card-section>
 
       <q-card-section>
@@ -27,15 +20,13 @@
           label="Fechar"
           color="negative"
           style="text-transform: none; padding: 0px 15px"
-          @click="closeModal"
           v-close-popup
         />
         <q-btn
-          label="Cadastrar"
+          :label="titleButton"
           color="primary"
           style="text-transform: none; padding: 0px 15px"
           @click="confirmModal"
-          v-close-popup
           :disable="!isFormValid"
         />
       </q-card-actions>
@@ -44,13 +35,18 @@
 </template>
 
 <script setup lang="ts">
+import { watch, ref } from 'vue';
+
+const titleButton = ref('Cadastrar');
+
 const modal = defineModel({
   default: false,
 });
 
-defineProps<{
+const props = defineProps<{
   title: string;
   isFormValid: boolean;
+  modalWithoutError: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -58,13 +54,18 @@ const emit = defineEmits<{
   (e: 'confirm'): void;
 }>();
 
-function closeModal() {
-  emit('close');
-}
-
 function confirmModal() {
   emit('confirm');
 }
+
+watch(
+  () => props.modalWithoutError,
+  (newValue) => {
+    if (newValue) {
+      modal.value = false;
+    }
+  }
+);
 </script>
 
 <style scoped></style>

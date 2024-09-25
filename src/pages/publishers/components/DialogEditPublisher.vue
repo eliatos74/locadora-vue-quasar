@@ -1,9 +1,10 @@
 <template>
   <DialogBase
-    v-model="modalCreate"
-    title="Cadastrar Editora"
-    :isFormValid="formValid"
+    v-model="modalEdit"
+    title="Editar Editora"
+    :isFormValid="formEdited"
     :modalWithoutError="modalWithoutError"
+    @close="closeModal"
     @confirm="submitForm"
   >
     <q-form>
@@ -57,42 +58,54 @@ import DialogBase from 'components/DialogBase.vue';
 import { Publisher } from '../../../interfaces/Publishers.interface';
 import { computed, reactive, watch } from 'vue';
 
-const modalCreate = defineModel({
+const modalEdit = defineModel({
   default: false,
 });
 
+const props = defineProps<{ publi?: Publisher; modalWithoutError: boolean }>();
+
 const publisher: Publisher = reactive({
+  id: undefined,
   name: '',
   email: '',
   telephone: '',
   site: '',
 });
 
-watch(modalCreate, () => {
-  if (!modalCreate.value) {
-    resetForm();
+let originalPublisher: Publisher = reactive({ ...publisher });
+
+watch(modalEdit, () => {
+  if (modalEdit.value) {
+    publisher.id = props.publi?.id;
+    publisher.name = props.publi!.name;
+    publisher.email = props.publi!.email;
+    publisher.telephone = props.publi!.telephone;
+    publisher.site = props.publi!.site;
+
+    originalPublisher = { ...publisher };
   }
 });
 
 function resetForm() {
-  (publisher.name = ''),
-    (publisher.email = ''),
-    (publisher.telephone = ''),
-    (publisher.site = '');
+  publisher.name = '';
+  publisher.email = '';
+  publisher.telephone = '';
+  publisher.site = '';
 }
 
-const formValid = computed(() => {
+const formEdited = computed(() => {
   return (
-    !!publisher.name &&
-    !!publisher.email &&
-    !!publisher.telephone &&
-    !!publisher.site
+    (!!publisher.name && publisher.name !== originalPublisher.name) ||
+    (!!publisher.email && publisher.email !== originalPublisher.email) ||
+    (!!publisher.telephone &&
+      publisher.telephone !== originalPublisher.telephone) ||
+    (!!publisher.site && publisher.site !== originalPublisher.site)
   );
 });
 
-defineProps<{
-  modalWithoutError: boolean;
-}>();
+function closeModal() {
+  resetForm();
+}
 
 function formatPhoneNumber() {
   publisher.telephone = publisher.telephone.replace(/\D/g, '');
@@ -103,7 +116,7 @@ const emit = defineEmits<{
 }>();
 
 function submitForm() {
-  if (formValid.value) {
+  if (formEdited.value) {
     formatPhoneNumber();
     emit('submit', publisher);
   }

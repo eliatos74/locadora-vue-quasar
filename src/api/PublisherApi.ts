@@ -1,29 +1,35 @@
 import axios from 'axios';
-import { Publisher, Parameters } from './../interfaces/Publishers.interface';
+import {
+  Publisher,
+  Parameters,
+  PaginationResponse,
+} from './../interfaces/Publishers.interface';
 
 const PublisherApi = {
-  async getPublishersList(request: Parameters) {
+  async getPublishersList(
+    request: Parameters
+  ): Promise<PaginationResponse<Publisher>> {
     const response = await axios.get('publisher', { params: request });
-    const vetor = response.data.content;
 
-    const publishers = [];
-
-    for (let index = 0; index < vetor.length; index++) {
-      const publisher = await this.getPublisherId(vetor[index].id);
-      publishers.push(publisher);
-    }
-
-    return publishers;
+    return response.data;
   },
+
   async getPublisherId(id: number) {
     const response = await axios.get(`publisher/${id}`);
     return response.data;
   },
+
   async createPublisher(publisher: Publisher) {
     const response = await axios.post('publisher', publisher);
     return response;
   },
-  updatePublisher() {},
+
+  async updatePublisher(publisher: Publisher) {
+    console.log(publisher);
+    const response = await axios.put('publisher', publisher);
+    return response.data;
+  },
+
   deletePublisher() {},
 };
 
