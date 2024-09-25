@@ -21,7 +21,6 @@
         @request="onRequest"
         :rows-per-page-options="[10, 20, 30, 40, 50]"
         no-data-label="Nenhum registro encontrado"
-        rows-per-page-label="Registros por página :"
       >
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -37,7 +36,13 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat round icon="visibility" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="visibility"
+              color="grey-8"
+              @click="showModalView(props.row)"
+            />
             <q-btn
               flat
               round
@@ -68,6 +73,11 @@
     :modalWithoutError="modalWithoutError"
     @submit="editPublisher"
   />
+  <DialogViewPublisher
+    v-model="modalView"
+    :publi="publisher"
+    :modalWithoutError="modalWithoutError"
+  />
 </template>
 
 <script setup lang="ts">
@@ -76,6 +86,7 @@ import { Publisher, Parameters } from '../../interfaces/Publishers.interface';
 import { PublisherApi } from '../../api/PublisherApi';
 import DialogEditPublisher from './components/DialogEditPublisher.vue';
 import DialogCreatePublisher from './components/DialogCreatePublisher.vue';
+import DialogViewPublisher from './components/DialogViewPublisher.vue';
 import { handleError } from 'src/helpers/Errors';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { QTableProps } from 'quasar';
@@ -84,6 +95,7 @@ const textSearch = ref<string>('');
 
 const modalCreate = ref(false);
 const modalEdit = ref(false);
+const modalView = ref(false);
 const modalWithoutError = ref(false);
 
 interface Column {
@@ -153,12 +165,18 @@ function showModalEdit(publisherRow: Publisher) {
   publisher.value = publisherRow;
 }
 
+function showModalView(publisherRow: Publisher) {
+  modalView.value = true;
+  publisher.value = publisherRow;
+}
+
 async function getPublishers() {
   try {
     const response = await PublisherApi.getPublishersList(request);
     pagination.value!.rowsNumber = response.totalElements;
     pagination.value!.rowsPerPage = response.pageSize;
     publishers.value = response.content;
+    modalWithoutError.value = false;
   } catch (error) {
     NotifyMessage.notifyError('Erro ao carregar as editoras');
   }
@@ -171,6 +189,8 @@ const onRequest: QTableProps['onRequest'] = function (props) {
 
   request.page = page - 1;
   request.size = rowsPerPage;
+  pagination.value!.page = page;
+  pagination.value!.rowsPerPage = rowsPerPage;
   getPublishers();
 };
 
@@ -194,9 +214,11 @@ async function editPublisher(params: Publisher) {
   try {
     const response = await PublisherApi.updatePublisher(params);
     console.log(response);
+    modalWithoutError.value = true;
     NotifyMessage.notifySuccess('Edidora editada com sucesso!');
     getPublishers();
   } catch (error) {
+    modalWithoutError.value = false;
     const errorResponse = handleError(error);
     errorResponse.forEach((err) => {
       NotifyMessage.notifyError(err);
