@@ -30,7 +30,9 @@ const PublisherApi = {
     return response.data;
   },
 
-  deletePublisher() {},
+  async deletePublisher(id: number) {
+    await axios.delete(`publisher/${id}`);
+  },
 };
 
 export { PublisherApi };

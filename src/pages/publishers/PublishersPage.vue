@@ -55,7 +55,7 @@
               round
               icon="delete"
               color="red-7"
-              @click="deletePublisher(props.row)"
+              @click="showModalDelete(props.row)"
             />
           </q-td>
         </template>
@@ -78,6 +78,12 @@
     :publi="publisher"
     :modalWithoutError="modalWithoutError"
   />
+  <DialogDeletePublisher
+    v-model="modalDelete"
+    :publisher="publisher"
+    :modalWithoutError="modalWithoutError"
+    @submit="deletePublisher"
+  />
 </template>
 
 <script setup lang="ts">
@@ -87,6 +93,7 @@ import { PublisherApi } from '../../api/PublisherApi';
 import DialogEditPublisher from './components/DialogEditPublisher.vue';
 import DialogCreatePublisher from './components/DialogCreatePublisher.vue';
 import DialogViewPublisher from './components/DialogViewPublisher.vue';
+import DialogDeletePublisher from './components/DialogDeletePublisher.vue';
 import { handleError } from 'src/helpers/Errors';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { QTableProps } from 'quasar';
@@ -96,6 +103,8 @@ const textSearch = ref<string>('');
 const modalCreate = ref(false);
 const modalEdit = ref(false);
 const modalView = ref(false);
+const modalDelete = ref(false);
+
 const modalWithoutError = ref(false);
 
 interface Column {
@@ -170,6 +179,11 @@ function showModalView(publisherRow: Publisher) {
   publisher.value = publisherRow;
 }
 
+function showModalDelete(publisherRow: Publisher) {
+  modalDelete.value = true;
+  publisher.value = publisherRow;
+}
+
 async function getPublishers() {
   try {
     const response = await PublisherApi.getPublishersList(request);
@@ -226,8 +240,19 @@ async function editPublisher(params: Publisher) {
   }
 }
 
-async function deletePublisher(params: Publisher) {
-  console.log(params);
+async function deletePublisher(id: number) {
+  try {
+    await PublisherApi.deletePublisher(id);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Editora excluida com sucesso!');
+    getPublishers();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
 }
 
 function searchPublisher() {

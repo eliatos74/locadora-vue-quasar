@@ -18,9 +18,10 @@
             <q-input
               v-model="publisher.name"
               placeholder="Digite o nome da editora"
-              readonly
               dense
               outlined
+              readonly
+              disable
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
           </div>
@@ -29,9 +30,10 @@
             <q-input
               v-model="publisher.email"
               placeholder="Email da editora"
-              readonly
               dense
               outlined
+              readonly
+              disable
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
           </div>
@@ -40,9 +42,10 @@
             <q-input
               v-model="publisher.telephone"
               placeholder="Telefone"
-              readonly
               dense
               outlined
+              readonly
+              disable
               mask="(##) # ####-####"
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
@@ -55,6 +58,7 @@
               dense
               outlined
               readonly
+              disable
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
           </div>
@@ -107,10 +111,15 @@ watch(modalVisibility, () => {
   width: 500px;
 }
 
-.q-field--outlined.q-field--readonly .q-field__control:before {
-  border-style: outset;
-}
-.q-input--readonly input {
-  border-style: solid !important;
-}
+/* .q-field {
+  &.q-field--readonly {
+    &.q-field--standard {
+      .q-field__control {
+        &:before {
+          border-bottom-style: solid;
+        }
+      }
+    }
+  }
+} */
 </style>
