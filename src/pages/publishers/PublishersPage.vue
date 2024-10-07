@@ -88,7 +88,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { Publisher, Parameters } from '../../interfaces/Publishers.interface';
+import { Publisher } from '../../interfaces/Publishers.interface';
+import { Parameters } from 'src/interfaces/Utils.intrface';
 import { PublisherApi } from '../../api/PublisherApi';
 import DialogEditPublisher from './components/DialogEditPublisher.vue';
 import DialogCreatePublisher from './components/DialogCreatePublisher.vue';

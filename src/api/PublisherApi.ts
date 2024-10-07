@@ -1,9 +1,6 @@
 import axios from 'axios';
-import {
-  Publisher,
-  Parameters,
-  PaginationResponse,
-} from './../interfaces/Publishers.interface';
+import { Parameters, PaginationResponse } from './../interfaces/Utils.intrface';
+import { Publisher } from 'src/interfaces/Publishers.interface';
 
 const PublisherApi = {
   async getPublishersList(
