@@ -14,8 +14,14 @@ const BookApi = {
   async createBook(request: Book) {
     await axios.post('book', request);
   },
-  getBookId() {},
-  updateBook() {},
+  async getBookId(id: number) {
+    const response = await axios.get(`/book/${id}`);
+    return response;
+  },
+  async updateBook(request: Book) {
+    await axios.put('book', request);
+  },
+
   deleteBook() {},
   async getPublisherSelect() {
     const request: Parameters = {

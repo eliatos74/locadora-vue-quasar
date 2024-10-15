@@ -92,7 +92,10 @@ const modalEdit = defineModel({
   default: false,
 });
 
-const props = defineProps<{ publi?: Publisher; modalWithoutError: boolean }>();
+const props = defineProps<{
+  publi?: Publisher;
+  modalWithoutError: boolean;
+}>();
 
 const publisher: Publisher = reactive({
   id: undefined,

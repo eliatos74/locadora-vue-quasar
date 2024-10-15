@@ -32,7 +32,13 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn flat round icon="visibility" color="grey-8" />
-            <q-btn flat round icon="edit" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="edit"
+              color="grey-8"
+              @click="showModalEdit(props.row)"
+            />
             <q-btn flat round icon="delete" color="red-7" />
           </q-td>
         </template>
@@ -40,22 +46,30 @@
     </div>
   </q-page>
   <DialogCreateBook
-    v-model="showModalCreate"
+    v-model="ModalCreate"
     @submit="createBook"
     :modalWithoutError="modalWithoutError"
+  />
+  <DialogEditBook
+    v-model="ModalEdit"
+    :book-edit="bookEdit"
+    :modalWithoutError="modalWithoutError"
+    @submit="editBook"
   />
 </template>
 
 <script setup lang="ts">
 import { BookApi } from 'src/api/BookApi';
-import { Book, ParametersBook } from 'src/interfaces/Books.interface';
+import { Book, BookEdit, ParametersBook } from 'src/interfaces/Books.interface';
 import { ref, onMounted } from 'vue';
 import DialogCreateBook from './components/DialogCreateBook.vue';
+import DialogEditBook from './components/DialogEditBook.vue';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 import { QTableProps } from 'quasar';
 
-const showModalCreate = ref(false);
+const ModalCreate = ref(false);
+const ModalEdit = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -105,6 +119,8 @@ const columns = ref<Column[]>([
   },
 ]);
 
+const bookEdit = ref<BookEdit>();
+
 const books = ref<Book[]>([]);
 
 const request: ParametersBook = {
@@ -126,8 +142,6 @@ const pagination = ref<QTableProps['pagination']>({
 const onRequest: QTableProps['onRequest'] = function (props) {
   const { page, rowsPerPage } = props.pagination;
 
-  console.log(page, rowsPerPage);
-
   request.page = page - 1;
   request.size = rowsPerPage;
   pagination.value!.page = page;
@@ -141,14 +155,14 @@ async function getBooks() {
     pagination.value!.rowsNumber = response.totalElements;
     pagination.value!.rowsPerPage = response.pageSize;
     books.value = response.content;
-    console.log(response);
+    modalWithoutError.value = false;
   } catch (error) {
-    NotifyMessage.notifyError('Erro ao carregar as livros');
+    NotifyMessage.notifyError('Erro ao carregar os livros');
   }
 }
 
 function openCreateModal() {
-  showModalCreate.value = true;
+  ModalCreate.value = true;
 }
 
 async function createBook(book: Book) {
@@ -156,6 +170,27 @@ async function createBook(book: Book) {
     await BookApi.createBook(book);
     modalWithoutError.value = true;
     NotifyMessage.notifySuccess('Livro cadastrado com sucesso!');
+    getBooks();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
+}
+
+async function showModalEdit(bookRow: Book) {
+  ModalEdit.value = true;
+  const response = await BookApi.getBookId(bookRow.id!);
+  bookEdit.value = response.data;
+}
+
+async function editBook(book: Book) {
+  try {
+    await BookApi.updateBook(book);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Livro editado com sucesso!');
     getBooks();
   } catch (error) {
     modalWithoutError.value = false;

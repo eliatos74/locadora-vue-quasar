@@ -23,7 +23,6 @@ export function getMessagesFromUnknownError(error: unknown): string[] {
 
 export function getMessagesFromAxiosError(error: AxiosError): string[] {
   const body = error.response?.data as ErrorResponse;
-  console.log(body);
   if (body?.objects && Array.isArray(body.objects)) {
     return body.objects.map((obj) => `${obj.name}: ${obj.userMessage}`);
   }

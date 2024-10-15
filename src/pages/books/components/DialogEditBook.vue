@@ -1,18 +1,18 @@
 <template>
-  <q-dialog v-model="modalCreate" persistent>
+  <q-dialog v-model="modalEdit" persistent>
     <q-card>
       <q-card-section
         class="row justify-between bg-primary text-white"
         style="height: 60px"
       >
         <div class="col-grow text-center text-h6" style="font-weight: bold">
-          Cadastrar Livro
+          Editar Livro
         </div>
         <q-btn color="primary" icon="close" dense round v-close-popup />
       </q-card-section>
 
       <q-card-section>
-        <q-form ref="myForm">
+        <q-form>
           <div class="input-group-css">
             <label>Nome do livro</label>
             <q-input
@@ -83,9 +83,11 @@
           v-close-popup
         />
         <q-btn
-          label="Cadastrar"
+          label="Confirmar"
           color="primary"
           style="text-transform: none; padding: 0px 15px"
+          :disable="!formEdited"
+          @click="submitForm"
         />
       </q-card-actions>
     </q-card>
@@ -94,30 +96,97 @@
 
 <script setup lang="ts">
 import { BookApi } from 'src/api/BookApi';
-import { Book } from 'src/interfaces/Books.interface';
-import { reactive, ref, watch } from 'vue';
+import { Book, BookEdit } from 'src/interfaces/Books.interface';
+import { computed, reactive, ref, watch } from 'vue';
 
-const modalCreate = defineModel({
+const modalEdit = defineModel({
   default: false,
 });
 
+const props = defineProps<{
+  bookEdit?: BookEdit;
+  modalWithoutError: boolean;
+}>();
+
 const book: Book = reactive({
+  id: undefined,
   name: '',
   author: '',
+  totalQuantity: 0,
   launchDate: '',
+  publisherId: '',
 });
+
+let originalBook: Book = reactive({ ...book });
+
+watch(
+  () => props.bookEdit,
+  async (newVal) => {
+    if (newVal && modalEdit.value) {
+      const idBook = await loadSelectPublishers(newVal.publisherName);
+
+      book.id = newVal.id;
+      book.name = newVal.name;
+      book.author = newVal.author;
+      book.totalQuantity = newVal.totalQuantity;
+      book.launchDate = newVal.launchDate;
+      book.publisherId = idBook;
+
+      originalBook = { ...book };
+    }
+  }
+);
 
 const options = ref<{ id: number; name: string }[]>([]);
 
-watch(modalCreate, () => {
-  if (modalCreate.value) {
-    loadSelectPublishers();
-  }
+async function loadSelectPublishers(publisherName: string) {
+  const response = await BookApi.getPublisherSelect();
+
+  const selectedPublisher = response.find(
+    (publisher) => publisher.name === publisherName
+  );
+
+  options.value = response;
+  return selectedPublisher?.id;
+}
+
+const formEdited = computed(() => {
+  return (
+    (!!book.name && book.name !== originalBook.name) ||
+    (!!book.author && book.author !== originalBook.author) ||
+    (!!book.totalQuantity &&
+      book.totalQuantity !== originalBook.totalQuantity) ||
+    (!!book.launchDate && book.launchDate !== originalBook.launchDate) ||
+    (!!book.publisherId && book.publisherId !== originalBook.publisherId)
+  );
 });
 
-async function loadSelectPublishers() {
-  const response = await BookApi.getPublisherSelect();
-  options.value = response;
+const emit = defineEmits<{
+  (e: 'submit', book: Book): void;
+}>();
+
+watch(
+  () => props.modalWithoutError,
+  (newVal) => {
+    if (newVal) {
+      modalEdit.value = false;
+      resetForm();
+    }
+  }
+);
+
+function resetForm() {
+  book.name = originalBook.name;
+  book.author = originalBook.author;
+  book.totalQuantity = originalBook.totalQuantity;
+  book.launchDate = originalBook.launchDate;
+  book.publisherId = originalBook.publisherId;
+}
+
+function submitForm() {
+  if (formEdited.value) {
+    emit('submit', book);
+  }
 }
 </script>
 

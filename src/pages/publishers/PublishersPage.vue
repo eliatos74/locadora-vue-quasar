@@ -200,8 +200,6 @@ async function getPublishers() {
 const onRequest: QTableProps['onRequest'] = function (props) {
   const { page, rowsPerPage } = props.pagination;
 
-  console.log(page, rowsPerPage);
-
   request.page = page - 1;
   request.size = rowsPerPage;
   pagination.value!.page = page;

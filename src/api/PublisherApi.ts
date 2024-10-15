@@ -22,7 +22,6 @@ const PublisherApi = {
   },
 
   async updatePublisher(publisher: Publisher) {
-    console.log(publisher);
     const response = await axios.put('publisher', publisher);
     return response.data;
   },
