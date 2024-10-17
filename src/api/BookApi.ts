@@ -22,7 +22,10 @@ const BookApi = {
     await axios.put('book', request);
   },
 
-  deleteBook() {},
+  async deleteBook(id: number) {
+    await axios.delete(`book/${id}`);
+  },
+
   async getPublisherSelect() {
     const request: Parameters = {
       search: '',

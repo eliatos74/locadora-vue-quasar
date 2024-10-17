@@ -45,7 +45,13 @@
               color="grey-8"
               @click="showModalEdit(props.row)"
             />
-            <q-btn flat round icon="delete" color="red-7" />
+            <q-btn
+              flat
+              round
+              icon="delete"
+              color="red-7"
+              @click="showModalDelete(props.row)"
+            />
           </q-td>
         </template>
       </q-table>
@@ -58,11 +64,17 @@
   />
   <DialogEditBook
     v-model="ModalEdit"
-    :book-edit="bookEdit"
+    :bookEdit="bookEdit"
     :modalWithoutError="modalWithoutError"
     @submit="editBook"
   />
   <DialogViewBook v-model="ModalView" :book-view="book" />
+  <DialogDeleteBook
+    v-model="ModalDelete"
+    :bookDelete="book"
+    :modalWithoutError="modalWithoutError"
+    @submit="deleteBook"
+  />
 </template>
 
 <script setup lang="ts">
@@ -72,6 +84,7 @@ import { ref, onMounted } from 'vue';
 import DialogCreateBook from './components/DialogCreateBook.vue';
 import DialogEditBook from './components/DialogEditBook.vue';
 import DialogViewBook from './components/DialogViewBook.vue';
+import DialogDeleteBook from './components/DialogDeleteBook.vue';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 import { QTableProps } from 'quasar';
@@ -79,6 +92,7 @@ import { QTableProps } from 'quasar';
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const ModalView = ref(false);
+const ModalDelete = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -215,6 +229,27 @@ async function showModalView(bookRow: Book) {
   ModalView.value = true;
   const response = await BookApi.getBookId(bookRow.id!);
   book.value = response.data;
+}
+
+async function showModalDelete(bookRow: BookInfo) {
+  ModalDelete.value = true;
+  book.value = bookRow;
+  console.log(book.value);
+}
+
+async function deleteBook(id: number) {
+  try {
+    await BookApi.deleteBook(id);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Livro excluido com sucesso!');
+    getBooks();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
 }
 
 onMounted(() => {
