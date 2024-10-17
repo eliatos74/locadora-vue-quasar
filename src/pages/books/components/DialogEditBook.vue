@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { BookApi } from 'src/api/BookApi';
-import { Book, BookEdit } from 'src/interfaces/Books.interface';
+import { Book, BookInfo } from 'src/interfaces/Books.interface';
 import { computed, reactive, ref, watch } from 'vue';
 
 const modalEdit = defineModel({
@@ -104,7 +104,7 @@ const modalEdit = defineModel({
 });
 
 const props = defineProps<{
-  bookEdit?: BookEdit;
+  bookEdit?: BookInfo;
   modalWithoutError: boolean;
 }>();
 

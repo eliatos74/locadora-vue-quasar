@@ -7,7 +7,7 @@ export interface Book {
   publisherId?: number | string;
 }
 
-export interface BookEdit {
+export interface BookInfo {
   id?: number;
   name: string;
   author: string;

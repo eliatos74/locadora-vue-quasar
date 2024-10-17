@@ -31,7 +31,13 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat round icon="visibility" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="visibility"
+              color="grey-8"
+              @click="showModalView(props.row)"
+            />
             <q-btn
               flat
               round
@@ -56,20 +62,23 @@
     :modalWithoutError="modalWithoutError"
     @submit="editBook"
   />
+  <DialogViewBook v-model="ModalView" :book-view="book" />
 </template>
 
 <script setup lang="ts">
 import { BookApi } from 'src/api/BookApi';
-import { Book, BookEdit, ParametersBook } from 'src/interfaces/Books.interface';
+import { Book, BookInfo, ParametersBook } from 'src/interfaces/Books.interface';
 import { ref, onMounted } from 'vue';
 import DialogCreateBook from './components/DialogCreateBook.vue';
 import DialogEditBook from './components/DialogEditBook.vue';
+import DialogViewBook from './components/DialogViewBook.vue';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 import { QTableProps } from 'quasar';
 
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
+const ModalView = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -119,7 +128,8 @@ const columns = ref<Column[]>([
   },
 ]);
 
-const bookEdit = ref<BookEdit>();
+const bookEdit = ref<BookInfo>();
+const book = ref<BookInfo>();
 
 const books = ref<Book[]>([]);
 
@@ -199,6 +209,12 @@ async function editBook(book: Book) {
       NotifyMessage.notifyError(err);
     });
   }
+}
+
+async function showModalView(bookRow: Book) {
+  ModalView.value = true;
+  const response = await BookApi.getBookId(bookRow.id!);
+  book.value = response.data;
 }
 
 onMounted(() => {
