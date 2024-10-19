@@ -10,9 +10,6 @@
   <div>
     <p style="color: black">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt repellendus
-      incidunt iure illo alias, repudiandae ipsum consequatur sed dolore. Maxime
-      quidem possimus ducimus aperiam repellendus repudiandae nostrum distinctio
-      quae provident.
     </p>
   </div>
 </template>

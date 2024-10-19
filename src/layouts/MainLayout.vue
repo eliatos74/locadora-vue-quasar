@@ -84,7 +84,7 @@ const sidebarItens = [
   {
     title: 'Locatários',
     icon: 'src/assets/badge-account.svg',
-    page: 'tenants',
+    page: 'renters',
   },
   {
     title: 'Usuários',
