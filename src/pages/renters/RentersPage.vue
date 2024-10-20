@@ -3,7 +3,12 @@
     <div class="header">
       <h5>Locatários</h5>
       <div class="header-source">
-        <input type="text" placeholder="Pesquisar..." />
+        <input
+          v-model="textSearch"
+          @input="searchRenter"
+          type="text"
+          placeholder="Pesquisar..."
+        />
         <button class="add-button">+ Novo</button>
       </div>
     </div>
@@ -47,6 +52,8 @@ import { NotifyMessage } from 'src/helpers/Notify';
 import { Renter } from 'src/interfaces/Renters.interface';
 import { Parameters } from 'src/interfaces/Utils.intrface';
 import { onMounted, ref } from 'vue';
+
+const textSearch = ref<string>('');
 
 interface Column {
   name: string;
@@ -113,15 +120,16 @@ async function getRenters() {
     const response = await RenterApi.getRentersList(request);
     pagination.value!.rowsNumber = response.totalElements;
     pagination.value!.rowsPerPage = response.pageSize;
-    console.log(response.content);
-
     renters.value = response.content;
-
-    // modalWithoutError.value = false;
   } catch (error) {
     console.error(error);
     NotifyMessage.notifyError('Erro ao carregar os locatários');
   }
+}
+
+function searchRenter() {
+  request.search = textSearch.value;
+  getRenters();
 }
 
 onMounted(() => {

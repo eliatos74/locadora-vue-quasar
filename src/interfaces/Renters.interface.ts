@@ -1,6 +1,8 @@
 export interface Renter {
-  id: number;
+  id?: number;
   name: string;
-  telephone: string;
   email: string;
+  telephone: string;
+  address: string;
+  cpf: string;
 }
