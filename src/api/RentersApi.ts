@@ -10,6 +10,10 @@ const RenterApi = {
 
     return response.data;
   },
+
+  async createRenter(request: Renter) {
+    await axios.post('renter', request);
+  },
 };
 
 export { RenterApi };

@@ -9,7 +9,7 @@
           type="text"
           placeholder="Pesquisar..."
         />
-        <button class="add-button">+ Novo</button>
+        <button class="add-button" @click="openCreateModal">+ Novo</button>
       </div>
     </div>
     <div class="q-pa-md">
@@ -43,6 +43,11 @@
       </q-table>
     </div>
   </q-page>
+  <DialogCreateRenter
+    v-model="ModalCreate"
+    @submit="createRenter"
+    :modalWithoutError="modalWithoutError"
+  />
 </template>
 
 <script setup lang="ts">
@@ -52,8 +57,12 @@ import { NotifyMessage } from 'src/helpers/Notify';
 import { Renter } from 'src/interfaces/Renters.interface';
 import { Parameters } from 'src/interfaces/Utils.intrface';
 import { onMounted, ref } from 'vue';
+import DialogCreateRenter from './components/DialogCreateRenter.vue';
+import { handleError } from 'src/helpers/Errors';
 
+const ModalCreate = ref(false);
 const textSearch = ref<string>('');
+const modalWithoutError = ref(false);
 
 interface Column {
   name: string;
@@ -121,9 +130,29 @@ async function getRenters() {
     pagination.value!.rowsNumber = response.totalElements;
     pagination.value!.rowsPerPage = response.pageSize;
     renters.value = response.content;
+    modalWithoutError.value = false;
   } catch (error) {
     console.error(error);
     NotifyMessage.notifyError('Erro ao carregar os locatários');
+  }
+}
+
+function openCreateModal() {
+  ModalCreate.value = true;
+}
+
+async function createRenter(renter: Renter) {
+  try {
+    await RenterApi.createRenter(renter);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Locatário  cadastrado com sucesso!');
+    getRenters();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
   }
 }
 
