@@ -6,18 +6,18 @@
         style="height: 60px"
       >
         <div class="col-grow text-center text-h6" style="font-weight: bold">
-          Visualizar Livro
+          Visualizar Locatário
         </div>
         <q-btn color="primary" icon="close" dense round v-close-popup />
       </q-card-section>
 
       <q-card-section>
-        <q-form>
+        <q-form ref="myForm">
           <div class="input-group-css">
-            <label>Nome do livro</label>
+            <label>Nome do locatário</label>
             <q-input
-              v-model="book.name"
-              placeholder="Digite o nome do livro"
+              v-model="renter.name"
+              placeholder="Digite o nome do locatário"
               dense
               outlined
               readonly
@@ -26,10 +26,10 @@
             />
           </div>
           <div class="input-group-css">
-            <label>Nome do Autor</label>
+            <label>E-mail do locatário</label>
             <q-input
-              v-model="book.author"
-              placeholder="Digite o nome do autor"
+              v-model="renter.email"
+              placeholder="Digite o e-mail do locatário"
               dense
               outlined
               readonly
@@ -38,11 +38,10 @@
             />
           </div>
           <div class="input-group-css">
-            <label>Quantidade total</label>
+            <label>Telefone do locatário</label>
             <q-input
-              v-model.number="book.totalQuantity"
-              placeholder="Digite o número de livros"
-              type="number"
+              v-model="renter.telephone"
+              placeholder="Digite o telefone do locatário"
               dense
               outlined
               readonly
@@ -51,10 +50,10 @@
             />
           </div>
           <div class="input-group-css">
-            <label>Data de lançamento</label>
+            <label>Endereço do locatário</label>
             <q-input
-              v-model="book.launchDate"
-              type="date"
+              v-model="renter.address"
+              placeholder="Digite o endereço do locatário"
               dense
               outlined
               readonly
@@ -63,12 +62,13 @@
             />
           </div>
           <div class="input-group-css">
-            <label>Editora</label>
+            <label>CPF do locatário</label>
             <q-input
-              v-model="book.publisherId"
-              type="text"
+              v-model="renter.cpf"
+              placeholder="Digite o CPF do locatário"
               dense
               outlined
+              mask="###.###.###-##"
               readonly
               disable
               :rules="[(val) => '']"
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { Book, BookInfo } from 'src/interfaces/Books.interface';
+import { Renter } from 'src/interfaces/Renters.interface';
 import { reactive, watch } from 'vue';
 
 const modalView = defineModel({
@@ -98,26 +98,25 @@ const modalView = defineModel({
 });
 
 const props = defineProps<{
-  bookView?: BookInfo;
+  renterView?: Renter;
 }>();
 
-const book: Book = reactive({
+const renter: Renter = reactive({
   name: '',
-  author: '',
-  totalQuantity: 0,
-  launchDate: '',
-  publisherId: '',
+  email: '',
+  telephone: '',
+  address: '',
+  cpf: '',
 });
+
 watch(
-  () => props.bookView,
-  async (bookView) => {
-    if (modalView.value) {
-      book.name = bookView!.name;
-      book.author = bookView!.author;
-      book.totalQuantity = bookView!.totalQuantity;
-      book.launchDate = bookView!.launchDate;
-      book.publisherId = bookView!.publisherName;
-    }
+  () => props.renterView,
+  async (renterView) => {
+    renter.name = renterView!.name;
+    renter.email = renterView!.email;
+    renter.telephone = renterView!.telephone;
+    renter.address = renterView!.address;
+    renter.cpf = renterView!.cpf;
   }
 );
 </script>

@@ -35,7 +35,13 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat round icon="visibility" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="visibility"
+              color="grey-8"
+              @click="showModalView(props.row)"
+            />
             <q-btn
               flat
               round
@@ -60,6 +66,7 @@
     @submit="editRenter"
     :modal-without-error="modalWithoutError"
   />
+  <DialogViewRenter v-model="modalView" :renterView="renter" />
 </template>
 
 <script setup lang="ts">
@@ -72,9 +79,11 @@ import { onMounted, ref } from 'vue';
 import DialogCreateRenter from './components/DialogCreateRenter.vue';
 import { handleError } from 'src/helpers/Errors';
 import DialogEditRenter from './components/DialogEditRenter.vue';
+import DialogViewRenter from './components/DialogViewRenter.vue';
 
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
+const modalView = ref(false);
 const textSearch = ref<string>('');
 const modalWithoutError = ref(false);
 
@@ -190,6 +199,12 @@ async function editRenter(renter: Renter) {
       NotifyMessage.notifyError(err);
     });
   }
+}
+
+async function showModalView(renterRow: Renter) {
+  modalView.value = true;
+  const response = await RenterApi.getRenterId(renterRow.id!);
+  renter.value = response.data;
 }
 
 function searchRenter() {
