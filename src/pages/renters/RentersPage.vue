@@ -36,7 +36,13 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn flat round icon="visibility" color="grey-8" />
-            <q-btn flat round icon="edit" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="edit"
+              color="grey-8"
+              @click="showModalEdit(props.row)"
+            />
             <q-btn flat round icon="delete" color="red-7" />
           </q-td>
         </template>
@@ -47,6 +53,12 @@
     v-model="ModalCreate"
     @submit="createRenter"
     :modalWithoutError="modalWithoutError"
+  />
+  <DialogEditRenter
+    v-model="ModalEdit"
+    :renter-edit="renter"
+    @submit="editRenter"
+    :modal-without-error="modalWithoutError"
   />
 </template>
 
@@ -59,8 +71,10 @@ import { Parameters } from 'src/interfaces/Utils.intrface';
 import { onMounted, ref } from 'vue';
 import DialogCreateRenter from './components/DialogCreateRenter.vue';
 import { handleError } from 'src/helpers/Errors';
+import DialogEditRenter from './components/DialogEditRenter.vue';
 
 const ModalCreate = ref(false);
+const ModalEdit = ref(false);
 const textSearch = ref<string>('');
 const modalWithoutError = ref(false);
 
@@ -99,6 +113,7 @@ const columns = ref<Column[]>([
 ]);
 
 const renters = ref<Renter[]>([]);
+const renter = ref<Renter>();
 
 const request: Parameters = {
   search: '',
@@ -146,6 +161,27 @@ async function createRenter(renter: Renter) {
     await RenterApi.createRenter(renter);
     modalWithoutError.value = true;
     NotifyMessage.notifySuccess('Locatário  cadastrado com sucesso!');
+    getRenters();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
+}
+
+async function showModalEdit(renterRow: Renter) {
+  ModalEdit.value = true;
+  const response = await RenterApi.getRenterId(renterRow.id!);
+  renter.value = response.data;
+}
+
+async function editRenter(renter: Renter) {
+  try {
+    await RenterApi.updateRenter(renter);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Locatário editado com sucesso!');
     getRenters();
   } catch (error) {
     modalWithoutError.value = false;

@@ -14,6 +14,13 @@ const RenterApi = {
   async createRenter(request: Renter) {
     await axios.post('renter', request);
   },
+  async getRenterId(id: number) {
+    const response = await axios.get(`/renter/${id}`);
+    return response;
+  },
+  async updateRenter(request: Renter) {
+    await axios.put('renter', request);
+  },
 };
 
 export { RenterApi };
