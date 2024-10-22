@@ -49,7 +49,13 @@
               color="grey-8"
               @click="showModalEdit(props.row)"
             />
-            <q-btn flat round icon="delete" color="red-7" />
+            <q-btn
+              flat
+              round
+              icon="delete"
+              color="red-7"
+              @click="showModalDelete(props.row)"
+            />
           </q-td>
         </template>
       </q-table>
@@ -67,6 +73,12 @@
     :modal-without-error="modalWithoutError"
   />
   <DialogViewRenter v-model="modalView" :renterView="renter" />
+  <DialogDeleteRenter
+    v-model="modalDelete"
+    :renter-delete="renter"
+    @submit="deleteRenter"
+    :modal-without-error="modalWithoutError"
+  />
 </template>
 
 <script setup lang="ts">
@@ -80,10 +92,12 @@ import DialogCreateRenter from './components/DialogCreateRenter.vue';
 import { handleError } from 'src/helpers/Errors';
 import DialogEditRenter from './components/DialogEditRenter.vue';
 import DialogViewRenter from './components/DialogViewRenter.vue';
+import DialogDeleteRenter from './components/DialogDeleteRenter.vue';
 
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const modalView = ref(false);
+const modalDelete = ref(false);
 const textSearch = ref<string>('');
 const modalWithoutError = ref(false);
 
@@ -205,6 +219,26 @@ async function showModalView(renterRow: Renter) {
   modalView.value = true;
   const response = await RenterApi.getRenterId(renterRow.id!);
   renter.value = response.data;
+}
+
+async function showModalDelete(renterRow: Renter) {
+  modalDelete.value = true;
+  renter.value = renterRow;
+}
+
+async function deleteRenter(id: number) {
+  try {
+    await RenterApi.deleteRenter(id);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Locatário excluido com sucesso!');
+    getRenters();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
 }
 
 function searchRenter() {

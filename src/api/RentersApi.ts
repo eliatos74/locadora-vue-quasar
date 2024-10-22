@@ -21,6 +21,9 @@ const RenterApi = {
   async updateRenter(request: Renter) {
     await axios.put('renter', request);
   },
+  async deleteRenter(id: number) {
+    await axios.delete(`renter/${id}`);
+  },
 };
 
 export { RenterApi };
