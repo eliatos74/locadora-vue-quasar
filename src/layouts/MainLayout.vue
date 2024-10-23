@@ -19,7 +19,16 @@
           icon="logout"
           aria-label="logout"
           @click="logoutClick"
-        />
+        >
+          <q-tooltip
+            class="bg-red"
+            anchor="center left"
+            self="center right"
+            :offset="[10, 10]"
+          >
+            Sair do Sistema
+          </q-tooltip>
+        </q-btn>
       </q-toolbar>
       <div class="linha"></div>
     </q-header>
