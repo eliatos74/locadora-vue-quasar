@@ -99,6 +99,9 @@ import { handleError } from 'src/helpers/Errors';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { QTableProps } from 'quasar';
 
+import { useQuasar } from 'quasar';
+const $q = useQuasar();
+
 const textSearch = ref<string>('');
 
 const modalCreate = ref(false);
@@ -259,8 +262,14 @@ function searchPublisher() {
   getPublishers();
 }
 
+async function loadPublisherScreen() {
+  $q.loading.show();
+  await getPublishers();
+  $q.loading.hide();
+}
+
 onMounted(() => {
-  getPublishers();
+  loadPublisherScreen();
 });
 </script>
 

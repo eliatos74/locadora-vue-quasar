@@ -94,6 +94,9 @@ import DialogEditRenter from './components/DialogEditRenter.vue';
 import DialogViewRenter from './components/DialogViewRenter.vue';
 import DialogDeleteRenter from './components/DialogDeleteRenter.vue';
 
+import { useQuasar } from 'quasar';
+const $q = useQuasar();
+
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const modalView = ref(false);
@@ -246,8 +249,14 @@ function searchRenter() {
   getRenters();
 }
 
-onMounted(() => {
-  getRenters();
+async function loadRentersScreen() {
+  $q.loading.show();
+  await getRenters();
+  $q.loading.hide();
+}
+
+onMounted(async () => {
+  loadRentersScreen();
 });
 </script>
 <style scoped></style>

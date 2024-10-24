@@ -94,6 +94,10 @@ import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 import { QTableProps } from 'quasar';
 
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
+
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const ModalView = ref(false);
@@ -181,6 +185,7 @@ const onRequest: QTableProps['onRequest'] = function (props) {
 };
 
 async function getBooks() {
+  $q.loading.show();
   try {
     const response = await BookApi.getBooksList(request);
     pagination.value!.rowsNumber = response.totalElements;
@@ -189,6 +194,8 @@ async function getBooks() {
     modalWithoutError.value = false;
   } catch (error) {
     NotifyMessage.notifyError('Erro ao carregar os livros');
+  } finally {
+    $q.loading.hide();
   }
 }
 
@@ -265,8 +272,14 @@ function searchRenter() {
   getBooks();
 }
 
+async function loadBooksScreen() {
+  $q.loading.show();
+  await getBooks();
+  $q.loading.hide();
+}
+
 onMounted(() => {
-  getBooks();
+  loadBooksScreen();
 });
 </script>
 

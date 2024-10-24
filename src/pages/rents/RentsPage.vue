@@ -65,6 +65,9 @@ import { BookApi } from 'src/api/BookApi';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 
+import { useQuasar } from 'quasar';
+const $q = useQuasar();
+
 const renters = ref();
 const books = ref();
 const textSearch = ref<string>('');
@@ -165,10 +168,12 @@ async function getRents() {
 }
 
 async function loadSelects() {
+  $q.loading.show();
   const responseRenters = await RenterApi.getRentersSelect();
   const responseBooks = await BookApi.getBooksSelect();
   renters.value = responseRenters;
   books.value = responseBooks;
+  $q.loading.hide();
 }
 
 function openCreateModal() {
@@ -196,9 +201,15 @@ function searchRenter() {
   getRents();
 }
 
+async function loadRentsScreen() {
+  $q.loading.show();
+  await getRents();
+  await loadSelects();
+  $q.loading.hide();
+}
+
 onMounted(() => {
-  getRents();
-  loadSelects();
+  loadRentsScreen();
 });
 </script>
 
