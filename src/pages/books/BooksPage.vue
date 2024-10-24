@@ -3,7 +3,12 @@
     <div class="header">
       <h5>Livros</h5>
       <div class="header-source">
-        <input type="text" placeholder="Pesquisar..." />
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          v-model="textSearch"
+          @input="searchRenter"
+        />
         <button class="add-button" @click="openCreateModal">+ Novo</button>
       </div>
     </div>
@@ -93,6 +98,8 @@ const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const ModalView = ref(false);
 const ModalDelete = ref(false);
+
+const textSearch = ref<string>('');
 
 const modalWithoutError = ref(false);
 
@@ -250,6 +257,12 @@ async function deleteBook(id: number) {
       NotifyMessage.notifyError(err);
     });
   }
+}
+
+function searchRenter() {
+  request.search = textSearch.value;
+  console.log(request);
+  getBooks();
 }
 
 onMounted(() => {

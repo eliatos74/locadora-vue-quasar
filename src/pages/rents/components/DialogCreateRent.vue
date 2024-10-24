@@ -106,8 +106,6 @@ const rent: RentCreate = reactive({
 
 watch(modalCreate, () => {
   if (modalCreate.value) {
-    console.log(props.rentersSelects);
-    console.log(props.booksSelects);
     loadSelects();
   }
 });
