@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RentList } from 'src/interfaces/Rent.interface';
+import { RentCreate, RentList } from 'src/interfaces/Rent.interface';
 import { PaginationResponse, Parameters } from 'src/interfaces/Utils.intrface';
 
 const RentApi = {
@@ -8,6 +8,9 @@ const RentApi = {
   ): Promise<PaginationResponse<RentList>> {
     const response = await axios.get('rent', { params: request });
     return response.data;
+  },
+  async createRent(request: RentCreate) {
+    await axios.post('rent', request);
   },
 };
 

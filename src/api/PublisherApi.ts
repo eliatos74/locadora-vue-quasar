@@ -29,6 +29,20 @@ const PublisherApi = {
   async deletePublisher(id: number) {
     await axios.delete(`publisher/${id}`);
   },
+  async getPublisherSelect() {
+    const request: Parameters = {
+      search: '',
+      page: 0,
+      size: 10000,
+      sort: 'id',
+      direction: 'ASC',
+    };
+    const response = await PublisherApi.getPublishersList(request);
+    return response.content.map((publisher: Publisher) => ({
+      id: publisher.id!,
+      name: publisher.name,
+    }));
+  },
 };
 
 export { PublisherApi };

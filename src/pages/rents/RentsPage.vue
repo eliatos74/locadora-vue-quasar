@@ -3,8 +3,13 @@
     <div class="header">
       <h5>Alugueis</h5>
       <div class="header-source">
-        <input type="text" placeholder="Pesquisar..." />
-        <button class="add-button">+ Novo</button>
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          v-model="textSearch"
+          @input="searchRenter"
+        />
+        <button class="add-button" @click="openCreateModal">+ Novo</button>
       </div>
     </div>
     <div class="q-pa-md">
@@ -39,14 +44,34 @@
       </q-table>
     </div>
   </q-page>
+  <DialogCreateRent
+    v-model="modalCreate"
+    :renters-selects="renters"
+    :books-selects="books"
+    @submit="creatRent"
+    :modal-without-error="modalWithoutError"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { QTableProps } from 'quasar';
 import { Parameters } from 'src/interfaces/Utils.intrface';
-import { RentList } from 'src/interfaces/Rent.interface';
+import { RentCreate, RentList } from 'src/interfaces/Rent.interface';
 import { RentApi } from 'src/api/RentApi';
+import DialogCreateRent from './components/DialogCreateRent.vue';
+import { RenterApi } from 'src/api/RentersApi';
+import { BookApi } from 'src/api/BookApi';
+import { NotifyMessage } from 'src/helpers/Notify';
+import { handleError } from 'src/helpers/Errors';
+
+const renters = ref();
+const books = ref();
+const textSearch = ref<string>('');
+
+const modalCreate = ref(false);
+
+const modalWithoutError = ref(false);
 
 interface Column {
   name: string;
@@ -127,12 +152,53 @@ const onRequest: QTableProps['onRequest'] = function (props) {
 };
 
 async function getRents() {
-  const response = await RentApi.getRentsList(request);
-  rentsList.value = response.content;
+  try {
+    const response = await RentApi.getRentsList(request);
+    pagination.value!.rowsNumber = response.totalElements;
+    pagination.value!.rowsPerPage = response.pageSize;
+    rentsList.value = response.content;
+    modalWithoutError.value = false;
+  } catch (error) {
+    console.error(error);
+    NotifyMessage.notifyError('Erro ao carregar os alugueis!');
+  }
+}
+
+async function loadSelects() {
+  const responseRenters = await RenterApi.getRentersSelect();
+  const responseBooks = await BookApi.getBooksSelect();
+  renters.value = responseRenters;
+  books.value = responseBooks;
+}
+
+function openCreateModal() {
+  modalCreate.value = true;
+}
+
+async function creatRent(rentCreate: RentCreate) {
+  try {
+    await RentApi.createRent(rentCreate);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Aluguel criado com sucesso!');
+    getRents();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
+}
+
+function searchRenter() {
+  request.search = textSearch.value;
+  console.log(request);
+  getRents();
 }
 
 onMounted(() => {
   getRents();
+  loadSelects();
 });
 </script>
 

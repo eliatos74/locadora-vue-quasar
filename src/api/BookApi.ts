@@ -1,8 +1,6 @@
 import { PaginationResponse, Parameters } from './../interfaces/Utils.intrface';
-import { Publisher } from 'src/interfaces/Publishers.interface';
 import axios from 'axios';
 
-import { PublisherApi } from './PublisherApi';
 import { Book } from 'src/interfaces/Books.interface';
 
 const BookApi = {
@@ -25,8 +23,7 @@ const BookApi = {
   async deleteBook(id: number) {
     await axios.delete(`book/${id}`);
   },
-
-  async getPublisherSelect() {
+  async getBooksSelect() {
     const request: Parameters = {
       search: '',
       page: 0,
@@ -34,10 +31,10 @@ const BookApi = {
       sort: 'id',
       direction: 'ASC',
     };
-    const response = await PublisherApi.getPublishersList(request);
-    return response.content.map((publisher: Publisher) => ({
-      id: publisher.id!,
-      name: publisher.name,
+    const response = await this.getBooksList(request);
+    return response.content.map((book: Book) => ({
+      id: book.id!,
+      name: book.name,
     }));
   },
 };

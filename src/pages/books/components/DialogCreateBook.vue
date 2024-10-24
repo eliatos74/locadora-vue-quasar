@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookApi } from 'src/api/BookApi';
+import { PublisherApi } from 'src/api/PublisherApi';
 import { Book } from 'src/interfaces/Books.interface';
 import { reactive, ref, watch, computed } from 'vue';
 
@@ -126,7 +126,7 @@ watch(modalCreate, () => {
 });
 
 async function loadSelectPublishers() {
-  const response = await BookApi.getPublisherSelect();
+  const response = await PublisherApi.getPublisherSelect();
   options.value = response;
 }
 

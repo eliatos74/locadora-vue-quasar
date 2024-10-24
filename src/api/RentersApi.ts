@@ -24,6 +24,20 @@ const RenterApi = {
   async deleteRenter(id: number) {
     await axios.delete(`renter/${id}`);
   },
+  async getRentersSelect() {
+    const request: Parameters = {
+      search: '',
+      page: 0,
+      size: 10000,
+      sort: 'id',
+      direction: 'ASC',
+    };
+    const response = await this.getRentersList(request);
+    return response.content.map((renter: Renter) => ({
+      id: renter.id!,
+      name: renter.name,
+    }));
+  },
 };
 
 export { RenterApi };

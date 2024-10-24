@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookApi } from 'src/api/BookApi';
+import { PublisherApi } from 'src/api/PublisherApi';
 import { Book, BookInfo } from 'src/interfaces/Books.interface';
 import { computed, reactive, ref, watch } from 'vue';
 
@@ -140,7 +140,7 @@ watch(
 const options = ref<{ id: number; name: string }[]>([]);
 
 async function loadSelectPublishers(publisherName: string) {
-  const response = await BookApi.getPublisherSelect();
+  const response = await PublisherApi.getPublisherSelect();
 
   const selectedPublisher = response.find(
     (publisher) => publisher.name === publisherName

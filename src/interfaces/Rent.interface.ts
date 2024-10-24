@@ -1,7 +1,7 @@
 export interface RentCreate {
-  renterId: number;
-  bookId: number;
-  deadlin: string;
+  renterId: string;
+  bookId: string;
+  deadline: string;
 }
 
 export interface RentList {
