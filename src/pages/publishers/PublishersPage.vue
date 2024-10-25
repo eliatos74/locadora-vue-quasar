@@ -264,8 +264,13 @@ function searchPublisher() {
 
 async function loadPublisherScreen() {
   $q.loading.show();
-  await getPublishers();
-  $q.loading.hide();
+  try {
+    await getPublishers();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    $q.loading.hide();
+  }
 }
 
 onMounted(() => {

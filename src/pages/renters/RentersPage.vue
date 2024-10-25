@@ -251,8 +251,13 @@ function searchRenter() {
 
 async function loadRentersScreen() {
   $q.loading.show();
-  await getRenters();
-  $q.loading.hide();
+  try {
+    await getRenters();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    $q.loading.hide();
+  }
 }
 
 onMounted(async () => {

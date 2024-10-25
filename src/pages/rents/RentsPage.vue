@@ -36,9 +36,38 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat round icon="bookmark_added" color="grey-8">
-              <q-tooltip>Entregar Livro</q-tooltip>
+            <q-btn
+              flat
+              round
+              icon="bookmark_added"
+              color="grey-8"
+              @click="openModalDeliver(props.row)"
+              :disable="
+                props.row.status === 'DELIVERED' ||
+                props.row.status === 'DELIVERED_WITH_DELAY'
+              "
+            >
+              <template
+                v-if="
+                  props.row.status === 'DELIVERED' ||
+                  props.row.status === 'DELIVERED_WITH_DELAY'
+                "
+              >
+              </template>
+              <template v-else>
+                <q-tooltip>Entregar Livro</q-tooltip>
+              </template>
             </q-btn>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-status="props">
+          <q-td :props="props">
+            <q-chip
+              :color="colorStatus[props.row.status as Status]?.bgColor"
+              text-color="white"
+              dense
+              :label="colorStatus[props.row.status as Status]?.translatedText"
+            />
           </q-td>
         </template>
       </q-table>
@@ -51,10 +80,16 @@
     @submit="creatRent"
     :modal-without-error="modalWithoutError"
   />
+  <DialogDeliverRent
+    v-model="modalDeliver"
+    :rent="rent"
+    :modal-without-error="modalWithoutError"
+    @submit="rentDeliver"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { QTableProps } from 'quasar';
 import { Parameters } from 'src/interfaces/Utils.intrface';
 import { RentCreate, RentList } from 'src/interfaces/Rent.interface';
@@ -66,6 +101,7 @@ import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 
 import { useQuasar } from 'quasar';
+import DialogDeliverRent from './components/DialogDeliverRent.vue';
 const $q = useQuasar();
 
 const renters = ref();
@@ -73,6 +109,7 @@ const books = ref();
 const textSearch = ref<string>('');
 
 const modalCreate = ref(false);
+const modalDeliver = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -127,6 +164,8 @@ const columns = ref<Column[]>([
     align: 'center',
   },
 ]);
+
+const rent = ref<RentList>();
 
 const rentsList = ref<RentList[]>([]);
 
@@ -195,17 +234,54 @@ async function creatRent(rentCreate: RentCreate) {
   }
 }
 
+function openModalDeliver(rentRow: RentList) {
+  modalDeliver.value = true;
+  rent.value = rentRow;
+}
+
+async function rentDeliver(id: number) {
+  console.log(id);
+}
+
 function searchRenter() {
   request.search = textSearch.value;
   console.log(request);
   getRents();
 }
 
+type Status = 'IN_TIME' | 'DELIVERED' | 'DELIVERED_WITH_DELAY' | 'DELAYED';
+
+const colorStatus = computed(() => {
+  return {
+    IN_TIME: {
+      bgColor: 'green',
+      translatedText: 'Em Tempo',
+    },
+    DELIVERED: {
+      bgColor: 'blue-7',
+      translatedText: 'Entregue',
+    },
+    DELIVERED_WITH_DELAY: {
+      bgColor: 'red',
+      translatedText: 'Entrgue com Atraso',
+    },
+    DELAYED: {
+      bgColor: 'orange',
+      translatedText: 'Atrasado',
+    },
+  };
+});
+
 async function loadRentsScreen() {
   $q.loading.show();
-  await getRents();
-  await loadSelects();
-  $q.loading.hide();
+  try {
+    await getRents();
+    await loadSelects();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    $q.loading.hide();
+  }
 }
 
 onMounted(() => {
