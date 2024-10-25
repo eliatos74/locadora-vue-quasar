@@ -12,6 +12,9 @@ const RentApi = {
   async createRent(request: RentCreate) {
     await axios.post('rent', request);
   },
+  async deliverRent(id: number) {
+    await axios.put(`rent/${id}`);
+  },
 };
 
 export { RentApi };

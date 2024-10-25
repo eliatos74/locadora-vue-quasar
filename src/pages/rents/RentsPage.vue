@@ -241,6 +241,18 @@ function openModalDeliver(rentRow: RentList) {
 
 async function rentDeliver(id: number) {
   console.log(id);
+  await RentApi.deliverRent(id);
+  modalWithoutError.value = true;
+  NotifyMessage.notifySuccess('Livro entregue com sucesso!');
+  getRents();
+  try {
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
 }
 
 function searchRenter() {
