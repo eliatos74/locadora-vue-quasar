@@ -13,3 +13,8 @@ export interface PaginationResponse<T> {
   totalElements: number;
   totalPages: number;
 }
+
+export interface Options {
+  label: string;
+  value: string;
+}

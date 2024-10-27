@@ -2,14 +2,22 @@
   <q-page style="padding: 0px 15px">
     <div class="header">
       <h5>Alugueis</h5>
-      <div class="header-source">
-        <input
-          type="text"
-          placeholder="Pesquisar..."
-          v-model="textSearch"
-          @input="searchRenter"
+      <div class="css-buttons">
+        <FilterByStatus
+          v-model="selectedStatus"
+          :options="options"
+          @selected-status="searchSelect"
         />
-        <button class="add-button" @click="openCreateModal">+ Novo</button>
+        <SearchInput v-model="searchText" @search-input="searchInput" />
+        <ClearSearchInputs @clear-search-rent="clearSearchRent" />
+        <q-btn
+          color="primary"
+          label="+ Novo"
+          no-caps
+          @click="openCreateModal"
+          size="14px"
+          class="custom-shadow"
+        />
       </div>
     </div>
     <div class="q-pa-md">
@@ -91,8 +99,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { QTableProps } from 'quasar';
-import { Parameters } from 'src/interfaces/Utils.intrface';
-import { RentCreate, RentList } from 'src/interfaces/Rent.interface';
+import {
+  ParametersRent,
+  RentCreate,
+  RentList,
+} from 'src/interfaces/Rent.interface';
 import { RentApi } from 'src/api/RentApi';
 import DialogCreateRent from './components/DialogCreateRent.vue';
 import { RenterApi } from 'src/api/RentersApi';
@@ -102,16 +113,22 @@ import { handleError } from 'src/helpers/Errors';
 
 import { useQuasar } from 'quasar';
 import DialogDeliverRent from './components/DialogDeliverRent.vue';
+import ClearSearchInputs from 'src/components/ClearSearchInputs.vue';
+import SearchInput from 'src/components/SearchInput.vue';
+import FilterByStatus from 'src/components/FilterByStatus.vue';
+import { Options } from 'src/interfaces/Utils.intrface';
 const $q = useQuasar();
 
 const renters = ref();
 const books = ref();
-const textSearch = ref<string>('');
+const searchText = ref<string>('');
 
 const modalCreate = ref(false);
 const modalDeliver = ref(false);
 
 const modalWithoutError = ref(false);
+
+const selectedStatus = ref<string>('');
 
 interface Column {
   name: string;
@@ -169,8 +186,9 @@ const rent = ref<RentList>();
 
 const rentsList = ref<RentList[]>([]);
 
-const request: Parameters = {
+const request: ParametersRent = {
   search: '',
+  status: '',
   page: 0,
   size: 10,
   sort: 'id',
@@ -255,18 +273,13 @@ async function rentDeliver(id: number) {
   }
 }
 
-function searchRenter() {
-  request.search = textSearch.value;
-  console.log(request);
-  getRents();
-}
-
 type Status = 'IN_TIME' | 'DELIVERED' | 'DELIVERED_WITH_DELAY' | 'DELAYED';
 
 const colorStatus = computed(() => {
   return {
     IN_TIME: {
       bgColor: 'green',
+      text: 'IN_TIME',
       translatedText: 'Em Tempo',
     },
     DELIVERED: {
@@ -283,6 +296,31 @@ const colorStatus = computed(() => {
     },
   };
 });
+
+const options: Options[] = [
+  { label: 'Em Tempo', value: 'IN_TIME' },
+  { label: 'Entregue', value: 'DELIVERED' },
+  { label: 'Entregue com Atraso', value: 'DELIVERED_WITH_DELAY' },
+  { label: 'Atrasado', value: 'DELAYED' },
+];
+
+function searchSelect(selectedStatus: string) {
+  request.status = selectedStatus;
+  getRents();
+}
+
+function searchInput(textSearch: string) {
+  request.search = textSearch;
+  getRents();
+}
+
+function clearSearchRent() {
+  searchText.value = '';
+  selectedStatus.value = '';
+  searchSelect(searchText.value);
+  searchInput(selectedStatus.value);
+  getRents();
+}
 
 async function loadRentsScreen() {
   $q.loading.show();
