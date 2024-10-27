@@ -10,14 +10,7 @@
         />
         <SearchInput v-model="searchText" @search-input="searchInput" />
         <ClearSearchInputs @clear-search-rent="clearSearchRent" />
-        <q-btn
-          color="primary"
-          label="+ Novo"
-          no-caps
-          @click="openCreateModal"
-          size="14px"
-          class="custom-shadow"
-        />
+        <ButtonNew @open-create-modal="openCreateModal" />
       </div>
     </div>
     <div class="q-pa-md">
@@ -117,6 +110,7 @@ import ClearSearchInputs from 'src/components/ClearSearchInputs.vue';
 import SearchInput from 'src/components/SearchInput.vue';
 import FilterByStatus from 'src/components/FilterByStatus.vue';
 import { Options } from 'src/interfaces/Utils.intrface';
+import ButtonNew from 'src/components/ButtonNew.vue';
 const $q = useQuasar();
 
 const renters = ref();

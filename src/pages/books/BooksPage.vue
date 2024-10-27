@@ -2,14 +2,9 @@
   <q-page style="padding: 0px 15px">
     <div class="header">
       <h5>Livros</h5>
-      <div class="header-source">
-        <input
-          type="text"
-          placeholder="Pesquisar..."
-          v-model="textSearch"
-          @input="searchRenter"
-        />
-        <button class="add-button" @click="openCreateModal">+ Novo</button>
+      <div class="css-buttons">
+        <SearchInput v-model="textSearch" @search-input="searchRenter" />
+        <ButtonNew @open-create-modal="openCreateModal" />
       </div>
     </div>
     <div class="q-pa-md">
@@ -90,6 +85,8 @@ import DialogCreateBook from './components/DialogCreateBook.vue';
 import DialogEditBook from './components/DialogEditBook.vue';
 import DialogViewBook from './components/DialogViewBook.vue';
 import DialogDeleteBook from './components/DialogDeleteBook.vue';
+import SearchInput from 'src/components/SearchInput.vue';
+import ButtonNew from 'src/components/ButtonNew.vue';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { handleError } from 'src/helpers/Errors';
 import { QTableProps } from 'quasar';

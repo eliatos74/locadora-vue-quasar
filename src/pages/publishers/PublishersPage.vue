@@ -2,14 +2,9 @@
   <q-page style="padding: 0px 15px">
     <div class="header">
       <h5>Editoras</h5>
-      <div class="header-source">
-        <input
-          v-model="textSearch"
-          @input="searchPublisher"
-          type="text"
-          placeholder="Pesquisar..."
-        />
-        <button class="add-button" @click="showModalCreate">+ Novo</button>
+      <div class="css-buttons">
+        <SearchInput v-model="textSearch" @search-input="searchPublisher" />
+        <ButtonNew @open-create-modal="showModalCreate" />
       </div>
     </div>
     <div class="q-pa-md">
@@ -95,6 +90,8 @@ import DialogEditPublisher from './components/DialogEditPublisher.vue';
 import DialogCreatePublisher from './components/DialogCreatePublisher.vue';
 import DialogViewPublisher from './components/DialogViewPublisher.vue';
 import DialogDeletePublisher from './components/DialogDeletePublisher.vue';
+import SearchInput from 'src/components/SearchInput.vue';
+import ButtonNew from 'src/components/ButtonNew.vue';
 import { handleError } from 'src/helpers/Errors';
 import { NotifyMessage } from 'src/helpers/Notify';
 import { QTableProps } from 'quasar';

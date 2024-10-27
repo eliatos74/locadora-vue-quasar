@@ -2,14 +2,9 @@
   <q-page style="padding: 0px 15px">
     <div class="header">
       <h5>Locatários</h5>
-      <div class="header-source">
-        <input
-          v-model="textSearch"
-          @input="searchRenter"
-          type="text"
-          placeholder="Pesquisar..."
-        />
-        <button class="add-button" @click="openCreateModal">+ Novo</button>
+      <div class="css-buttons">
+        <SearchInput v-model="textSearch" @search-input="searchRenter" />
+        <ButtonNew @open-create-modal="openCreateModal" />
       </div>
     </div>
     <div class="q-pa-md">
@@ -95,6 +90,8 @@ import DialogViewRenter from './components/DialogViewRenter.vue';
 import DialogDeleteRenter from './components/DialogDeleteRenter.vue';
 
 import { useQuasar } from 'quasar';
+import SearchInput from 'src/components/SearchInput.vue';
+import ButtonNew from 'src/components/ButtonNew.vue';
 const $q = useQuasar();
 
 const ModalCreate = ref(false);
