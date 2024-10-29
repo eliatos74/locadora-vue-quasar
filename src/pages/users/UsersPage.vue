@@ -31,7 +31,13 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn flat round icon="visibility" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="visibility"
+              color="grey-8"
+              @click="showModalView(props.row)"
+            />
             <q-btn
               flat
               round
@@ -56,6 +62,7 @@
     @submit="editUser"
     :modal-without-error="modalWithoutError"
   />
+  <DialogViewUser v-model="ModalView" :user-view="user" />
 </template>
 
 <script setup lang="ts">
@@ -70,11 +77,13 @@ import ButtonNew from 'src/components/ButtonNew.vue';
 import SearchInput from 'src/components/SearchInput.vue';
 import { handleError } from 'src/helpers/Errors';
 import DialogEditUser from './components/DialogEditUser.vue';
+import DialogViewUser from './components/DialogViewUser.vue';
 
 const $q = useQuasar();
 
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
+const ModalView = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -185,6 +194,12 @@ async function editUser(user: User) {
       NotifyMessage.notifyError(err);
     });
   }
+}
+
+async function showModalView(userRow: User) {
+  ModalView.value = true;
+  const response = await UserApi.getUserId(userRow.id!);
+  user.value = response.data;
 }
 
 function searchUser() {
