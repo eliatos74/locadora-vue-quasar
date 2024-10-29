@@ -149,24 +149,32 @@ const columns = ref<QTableColumn[]>([
     label: 'Data Devolução',
     field: 'devolutionDate',
     align: 'center',
-    // format: (value) =>
-    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
+    format: (value) =>
+      value
+        ? new Date(`${value}T00:00:00`).toLocaleDateString('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+          })
+        : '',
   },
   {
     name: 'deadLineDate',
     label: 'Limite Entrega',
     field: 'deadLineDate',
     align: 'center',
-    // format: (value) =>
-    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
+    format: (value) =>
+      new Date(`${value}T00:00:00`).toLocaleDateString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+      }),
   },
   {
     name: 'rentDate',
     label: 'Data Aluguel',
     field: 'rentDate',
     align: 'center',
-    // format: (value) =>
-    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
+    format: (value) =>
+      new Date(`${value}T00:00:00`).toLocaleDateString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+      }),
   },
   {
     name: 'status',
