@@ -18,3 +18,7 @@ export interface Options {
   label: string;
   value: string;
 }
+
+export interface OptionsRole {
+  role: 'ADMIN' | 'VISITOR';
+}
