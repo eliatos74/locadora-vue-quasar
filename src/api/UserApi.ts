@@ -13,6 +13,13 @@ const UserApi = {
   async createBook(request: User) {
     await axios.post('users', request);
   },
+  async getUserId(id: number) {
+    const response = await axios.get(`/users/${id}`);
+    return response;
+  },
+  async updateUser(request: User) {
+    await axios.put('users', request);
+  },
 };
 
 export { UserApi };

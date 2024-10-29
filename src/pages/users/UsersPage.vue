@@ -32,7 +32,13 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn flat round icon="visibility" color="grey-8" />
-            <q-btn flat round icon="edit" color="grey-8" />
+            <q-btn
+              flat
+              round
+              icon="edit"
+              color="grey-8"
+              @click="showModalEdit(props.row)"
+            />
             <q-btn flat round icon="delete" color="red-7" />
           </q-td>
         </template>
@@ -42,6 +48,12 @@
   <DialogCreateUser
     v-model="ModalCreate"
     @submit="createUser"
+    :modal-without-error="modalWithoutError"
+  />
+  <DialogEditUser
+    v-model="ModalEdit"
+    :user-edit="user"
+    @submit="editUser"
     :modal-without-error="modalWithoutError"
   />
 </template>
@@ -57,10 +69,12 @@ import DialogCreateUser from './components/DialogCreateUser.vue';
 import ButtonNew from 'src/components/ButtonNew.vue';
 import SearchInput from 'src/components/SearchInput.vue';
 import { handleError } from 'src/helpers/Errors';
+import DialogEditUser from './components/DialogEditUser.vue';
 
 const $q = useQuasar();
 
 const ModalCreate = ref(false);
+const ModalEdit = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -94,6 +108,7 @@ const columns = ref<Column[]>([
   },
 ]);
 
+const user = ref<User>();
 const users = ref<UserList[]>([]);
 
 const request: Parameters = {
@@ -141,6 +156,27 @@ async function createUser(user: User) {
     await UserApi.createBook(user);
     modalWithoutError.value = true;
     NotifyMessage.notifySuccess('Usuário cadastrado com sucesso!');
+    getUsers();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
+}
+
+async function showModalEdit(userRow: User) {
+  ModalEdit.value = true;
+  const response = await UserApi.getUserId(userRow.id!);
+  user.value = response.data;
+}
+
+async function editUser(user: User) {
+  try {
+    await UserApi.updateUser(user);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Usuário editado com sucesso!');
     getUsers();
   } catch (error) {
     modalWithoutError.value = false;
