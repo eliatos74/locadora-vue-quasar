@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { QTableProps } from 'quasar';
+import { QTableColumn, QTableProps } from 'quasar';
 import {
   ParametersRent,
   RentCreate,
@@ -124,14 +124,14 @@ const modalWithoutError = ref(false);
 
 const selectedStatus = ref<string>('');
 
-interface Column {
-  name: string;
-  label: string;
-  field: string;
-  align: 'left' | 'center' | 'right';
-}
+// interface Column {
+//   name: string;
+//   label: string;
+//   field: string;
+//   align: 'left' | 'center' | 'right';
+// }
 
-const columns = ref<Column[]>([
+const columns = ref<QTableColumn[]>([
   {
     name: 'renterName',
     label: 'Nome do Locatário',
@@ -149,18 +149,24 @@ const columns = ref<Column[]>([
     label: 'Data Devolução',
     field: 'devolutionDate',
     align: 'center',
+    // format: (value) =>
+    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
   },
   {
     name: 'deadLineDate',
     label: 'Limite Entrega',
     field: 'deadLineDate',
     align: 'center',
+    // format: (value) =>
+    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
   },
   {
     name: 'rentDate',
     label: 'Data Aluguel',
     field: 'rentDate',
     align: 'center',
+    // format: (value) =>
+    //   value ? new Date(value).toLocaleDateString('pt-BR') : '',
   },
   {
     name: 'status',

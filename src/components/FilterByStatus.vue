@@ -4,6 +4,7 @@
     dense
     v-model="selected"
     :options="options"
+    map-options
     emit-value
     label="Filtrar por Status"
     style="width: 300px"
