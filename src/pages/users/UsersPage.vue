@@ -45,7 +45,13 @@
               color="grey-8"
               @click="showModalEdit(props.row)"
             />
-            <q-btn flat round icon="delete" color="red-7" />
+            <q-btn
+              flat
+              round
+              icon="delete"
+              color="red-7"
+              @click="showModalDelete(props.row)"
+            />
           </q-td>
         </template>
       </q-table>
@@ -63,6 +69,12 @@
     :modal-without-error="modalWithoutError"
   />
   <DialogViewUser v-model="ModalView" :user-view="user" />
+  <DialogDeleteUser
+    v-model="ModalDelete"
+    :modal-without-error="modalWithoutError"
+    :user="user"
+    @submit="deleteUser"
+  />
 </template>
 
 <script setup lang="ts">
@@ -78,12 +90,14 @@ import SearchInput from 'src/components/SearchInput.vue';
 import { handleError } from 'src/helpers/Errors';
 import DialogEditUser from './components/DialogEditUser.vue';
 import DialogViewUser from './components/DialogViewUser.vue';
+import DialogDeleteUser from './components/DialogDeleteUser.vue';
 
 const $q = useQuasar();
 
 const ModalCreate = ref(false);
 const ModalEdit = ref(false);
 const ModalView = ref(false);
+const ModalDelete = ref(false);
 
 const modalWithoutError = ref(false);
 
@@ -200,6 +214,26 @@ async function showModalView(userRow: User) {
   ModalView.value = true;
   const response = await UserApi.getUserId(userRow.id!);
   user.value = response.data;
+}
+
+async function showModalDelete(userRow: User) {
+  ModalDelete.value = true;
+  user.value = userRow;
+}
+
+async function deleteUser(id: number) {
+  try {
+    await UserApi.deleteUser(id);
+    modalWithoutError.value = true;
+    NotifyMessage.notifySuccess('Usuário excluido com sucesso!');
+    getUsers();
+  } catch (error) {
+    modalWithoutError.value = false;
+    const errorResponse = handleError(error);
+    errorResponse.forEach((err) => {
+      NotifyMessage.notifyError(err);
+    });
+  }
 }
 
 function searchUser() {

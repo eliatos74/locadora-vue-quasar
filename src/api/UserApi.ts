@@ -20,6 +20,9 @@ const UserApi = {
   async updateUser(request: User) {
     await axios.put('users', request);
   },
+  async deleteUser(id: number) {
+    await axios.delete(`users/${id}`);
+  },
 };
 
 export { UserApi };
