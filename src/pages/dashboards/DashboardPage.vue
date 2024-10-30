@@ -37,44 +37,14 @@
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </q-card-section>
       </q-card>
-      <q-table
-        class="my-card-bottom"
-        title="Table Title"
-        :rows="rentsList"
-        :columns="columns"
-        row-key="name"
-      />
+
+      <SummaryLoans />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RentList } from 'src/interfaces/Rent.interface';
-import { ref } from 'vue';
-
-const rentsList = ref<RentList[]>([]);
-
-interface Column {
-  name: string;
-  label: string;
-  field: string;
-  align: 'left' | 'center' | 'right';
-}
-
-const columns = ref<Column[]>([
-  {
-    name: 'renterName',
-    label: 'Nome do Locatário',
-    field: 'renterName',
-    align: 'center',
-  },
-  {
-    name: 'bookName',
-    label: 'Nome do Livro',
-    field: 'bookName',
-    align: 'center',
-  },
-]);
+import SummaryLoans from './components/SummaryLoans.vue';
 </script>
 
 <style scoped>
@@ -82,7 +52,7 @@ const columns = ref<Column[]>([
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px; /* Espaçamento entre as linhas */
+  gap: 20px;
 }
 
 .top-card {
@@ -92,7 +62,7 @@ const columns = ref<Column[]>([
 
 .bottom-cards {
   display: flex;
-  gap: 20px; /* Espaçamento entre os cards */
+  gap: 20px;
   justify-content: center;
 }
 
