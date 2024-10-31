@@ -1,13 +1,17 @@
 import axios from 'axios';
-import { RentsRelation } from 'src/interfaces/Dashboard.interface';
-import { PaginationResponse, Parameters } from 'src/interfaces/Utils.intrface';
+import { Parameters } from 'src/interfaces/Utils.intrface';
 
 const DashboardkApi = {
-  async getRentsRelationList(
-    request: Parameters
-  ): Promise<PaginationResponse<RentsRelation>> {
+  async getRentsRelationList() {
+    const request: Parameters = {
+      search: '',
+      page: 0,
+      size: 10000,
+      sort: 'id',
+      direction: 'ASC',
+    };
     const response = await axios.get('rent/renters', { params: request });
-    return response.data;
+    return response.data.content;
   },
 };
 

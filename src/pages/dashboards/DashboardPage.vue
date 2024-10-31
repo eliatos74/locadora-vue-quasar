@@ -4,7 +4,7 @@
   </div>
 
   <div class="q-pa-md card-container">
-    <div class="top-card">
+    <!-- <div class="top-card">
       <q-card class="my-card-top">
         <q-card class="my-card">
           <q-card-section>
@@ -29,21 +29,22 @@
           </q-chip>
         </q-card-section>
       </q-card>
-    </div>
+    </div> -->
     <div class="bottom-cards">
       <q-card class="my-card-bottom">
         <q-card-section>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          <BarChart />
         </q-card-section>
       </q-card>
-
-      <SummaryLoans />
+      <q-card class="my-card">
+        <q-card-section style="padding: 5px"><SummaryLoans /> </q-card-section>
+      </q-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BarChart from './components/BarChart.vue';
 import SummaryLoans from './components/SummaryLoans.vue';
 </script>
 

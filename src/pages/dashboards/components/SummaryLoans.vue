@@ -1,25 +1,27 @@
 <template>
-  <q-table
-    class="my-card-bottom"
-    title="Resumo de Empréstimos por Usuário"
-    :rows="rentsList"
-    :columns="columns"
-    :request="onRequest"
-    row-key="name"
-    virtual-scroll
-    :rows-per-page-options="[10, 20, 30, 40, 50]"
-    no-data-label="Nenhum registro encontrado"
-  />
+  <div class="q-pa-md">
+    <q-table
+      style="height: 400px"
+      flat
+      bordered
+      title="Resumo de Empréstimos por Usuário"
+      :rows="rows"
+      :columns="columns"
+      row-key="index"
+      virtual-scroll
+      v-model:pagination="pagination"
+      :rows-per-page-options="[0]"
+    >
+      <template v-slot=""> </template>
+    </q-table>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { QTableColumn, QTableProps } from 'quasar';
+import { QTableColumn } from 'quasar';
 import { DashboardkApi } from 'src/api/DashboardApi';
-import { RentsRelation } from 'src/interfaces/Dashboard.interface';
-import { Parameters } from 'src/interfaces/Utils.intrface';
+import { RentList } from 'src/interfaces/Rent.interface';
 import { onMounted, ref } from 'vue';
-
-const rentsList = ref<RentsRelation[]>([]);
 
 const columns = ref<QTableColumn[]>([
   {
@@ -42,40 +44,26 @@ const columns = ref<QTableColumn[]>([
   },
 ]);
 
-const request: Parameters = {
-  search: '',
-  page: 0,
-  size: 10,
-  sort: 'id',
-  direction: 'ASC',
-};
-
-const pagination = ref<QTableProps['pagination']>({
-  page: 0,
-  rowsNumber: 0,
-  rowsPerPage: 10,
+const rows = ref<RentList[]>([]);
+const pagination = ref({
+  rowsPerPage: 0,
 });
 
-const onRequest: QTableProps['onRequest'] = function (props) {
-  const { page, rowsPerPage } = props.pagination;
+async function getRentsList() {
+  try {
+    const response = await DashboardkApi.getRentsRelationList();
+    console.log(response);
 
-  request.page = page - 1;
-  request.size = rowsPerPage;
-  pagination.value!.page = page;
-  pagination.value!.rowsPerPage = rowsPerPage;
-  getRentsRelation();
-};
-
-async function getRentsRelation() {
-  const response = await DashboardkApi.getRentsRelationList(request);
-  pagination.value!.rowsNumber = response.totalElements;
-  pagination.value!.rowsPerPage = response.pageSize;
-  rentsList.value = response.content;
+    rows.value = response.map((item: RentList, index: number) => ({
+      ...item,
+      index,
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar a lista de alugueis:', error);
+  }
 }
 
 onMounted(() => {
-  getRentsRelation();
+  getRentsList();
 });
 </script>
-
-<style scoped></style>
