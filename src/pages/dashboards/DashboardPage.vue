@@ -44,8 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import BarChart from './components/BarChart.vue';
 import SummaryLoans from './components/SummaryLoans.vue';
+
+import { defineAsyncComponent } from 'vue';
+
+const BarChart = defineAsyncComponent(
+  () => import('src/pages/dashboards/components/BarChart.vue')
+);
 </script>
 
 <style scoped>
