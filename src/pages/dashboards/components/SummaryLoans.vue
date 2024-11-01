@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md">
+    <div class="title">Resumo de Empréstimos por Usuário</div>
     <q-table
-      style="height: 400px"
+      style="height: 350px"
       flat
       bordered
-      title="Resumo de Empréstimos por Usuário"
       :rows="rows"
       :columns="columns"
       row-key="index"
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { QTableColumn } from 'quasar';
-import { DashboardkApi } from 'src/api/DashboardApi';
+import { DashboardApi } from 'src/api/DashboardApi';
 import { RentList } from 'src/interfaces/Rent.interface';
 import { onMounted, ref } from 'vue';
 
@@ -51,7 +51,7 @@ const pagination = ref({
 
 async function getRentsList() {
   try {
-    const response = await DashboardkApi.getRentsRelationList();
+    const response = await DashboardApi.getRentsRelationList();
     console.log(response);
 
     rows.value = response.map((item: RentList, index: number) => ({
@@ -67,3 +67,12 @@ onMounted(() => {
   getRentsList();
 });
 </script>
+
+<style scoped>
+.title {
+  color: var(--q-primary);
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+</style>

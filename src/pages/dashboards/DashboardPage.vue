@@ -4,40 +4,21 @@
   </div>
 
   <div class="q-pa-md card-container">
-    <!-- <div class="top-card">
+    <div class="top-card">
       <q-card class="my-card-top">
-        <q-card class="my-card">
-          <q-card-section>
-            <div class="text-h6">Ranking</div>
-          </q-card-section>
-        </q-card>
-        <q-card-section>
-          <q-chip class="glossy" icon="directions" label="Get directions" />
-          <q-chip>
-            <q-avatar class="glossy" color="green" text-color="white"
-              >1</q-avatar
-            >
-            Livro 01
-          </q-chip>
-          <q-chip>
-            <q-avatar color="green" text-color="white">1</q-avatar>
-            Livro 01
-          </q-chip>
-          <q-chip>
-            <q-avatar color="green" text-color="white">1</q-avatar>
-            Livro 01
-          </q-chip>
-        </q-card-section>
+        <q-card class="my-card">Elias</q-card>
       </q-card>
-    </div> -->
+    </div>
     <div class="bottom-cards">
       <q-card class="my-card-bottom">
-        <q-card-section>
+        <q-card-section style="height: 450px; width: 614px">
           <BarChart />
         </q-card-section>
       </q-card>
-      <q-card class="my-card">
-        <q-card-section style="padding: 5px"><SummaryLoans /> </q-card-section>
+      <q-card class>
+        <q-card-section style="padding: 5px">
+          <SummaryLoans />
+        </q-card-section>
       </q-card>
     </div>
   </div>
@@ -77,5 +58,9 @@ const BarChart = defineAsyncComponent(
   height: 100%;
   min-width: 400px;
   min-height: 400px;
+}
+
+.css {
+  width: 400px;
 }
 </style>

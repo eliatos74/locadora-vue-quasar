@@ -1,41 +1,75 @@
 <template>
-  <apexchart
-    height="300"
-    type="bar"
-    :options="options"
-    :series="series"
-  ></apexchart>
+  <apexchart type="bar" :options="options" :series="series"></apexchart>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { getCssVar } from 'quasar';
+import { DashboardApi } from 'src/api/DashboardApi';
 
 const options = ref({
   title: {
-    text: 'ApexColumn',
+    text: 'Livros devolvidos dentro e fora do prazo',
     align: 'left',
+    style: {
+      fontSize: '20px',
+      fontWeight: 'bold',
+      color: getCssVar('primary'),
+    },
   },
   chart: {
-    id: 'apex-column',
+    id: 'apex-bar',
+    toolbar: {
+      show: false,
+    },
   },
-  colors: [getCssVar('primary'), getCssVar('secondary'), getCssVar('negative')],
+  colors: [getCssVar('primary'), getCssVar('negative')],
   xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+    categories: ['Dentro do Prazo', 'Fora do Prazo'],
+    labels: {
+      show: false,
+    },
   },
   plotOptions: {
     bar: {
-      horizontal: false,
       columnWidth: '55%',
       endingShape: 'rounded',
+      distributed: true,
+    },
+  },
+  legend: {
+    show: true,
+    position: 'bottom',
+    labels: {
+      colors: '#000',
+    },
+  },
+  dataLabels: {
+    enabled: true,
+  },
+  yaxis: {
+    max: 100,
+    labels: {
+      formatter: (value: number) => value.toFixed(0),
     },
   },
 });
 
 const series = ref([
   {
-    name: 'series-1',
-    data: [30, 40, 45, 50, 49, 60, 70, 91],
+    name: 'Devoluções',
+    data: [75, 15],
   },
 ]);
+
+async function refoundInformations() {
+  const { valueDeliver, valueDeliverDelay } =
+    await DashboardApi.getRefundInformation();
+
+  series.value[0].data = [valueDeliver, valueDeliverDelay];
+}
+
+onMounted(() => {
+  refoundInformations();
+});
 </script>
