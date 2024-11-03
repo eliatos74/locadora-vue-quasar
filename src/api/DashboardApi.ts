@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { MostRentend } from 'src/interfaces/Dashboard.interface';
 import { RentList } from 'src/interfaces/Rent.interface';
 import { Parameters } from 'src/interfaces/Utils.intrface';
 
@@ -33,6 +34,17 @@ const DashboardApi = {
       }
     });
     return counters;
+  },
+  async getMostRentedBooks() {
+    const count = 3;
+    const data: MostRentend[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const response = await axios.get(`rent/most-rented/${i + 1}`);
+      data.push(response.data);
+    }
+
+    return data;
   },
 };
 

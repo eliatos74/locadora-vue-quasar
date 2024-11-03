@@ -4,3 +4,8 @@ export interface RentsRelation {
   totalRents: number;
   activeRents: number;
 }
+
+export interface MostRentend {
+  bookName: string;
+  rentedNumber: number;
+}
