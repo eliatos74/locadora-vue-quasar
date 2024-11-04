@@ -10,7 +10,10 @@
         />
         <SearchInput v-model="searchText" @search-input="searchInput" />
         <ClearSearchInputs @clear-search-rent="clearSearchRent" />
-        <ButtonNew @open-create-modal="openCreateModal" />
+        <ButtonNew
+          v-if="!Role.isVisitor()"
+          @open-create-modal="openCreateModal"
+        />
       </div>
     </div>
     <div class="q-pa-md">
@@ -111,6 +114,7 @@ import SearchInput from 'src/components/SearchInput.vue';
 import FilterByStatus from 'src/components/FilterByStatus.vue';
 import { Options } from 'src/interfaces/Utils.intrface';
 import ButtonNew from 'src/components/ButtonNew.vue';
+import { Role } from 'src/helpers/Role';
 const $q = useQuasar();
 
 const renters = ref();
@@ -182,13 +186,16 @@ const columns = ref<QTableColumn[]>([
     field: 'status',
     align: 'center',
   },
-  {
+]);
+
+if (Role.columnActions()) {
+  columns.value.push({
     name: 'actions',
     label: 'Ações',
     field: 'actions',
     align: 'center',
-  },
-]);
+  });
+}
 
 const rent = ref<RentList>();
 

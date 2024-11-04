@@ -4,7 +4,10 @@
       <h5>Usuários</h5>
       <div class="css-buttons">
         <SearchInput v-model="textSearch" @search-input="searchUser" />
-        <ButtonNew @open-create-modal="openModalCreate" />
+        <ButtonNew
+          v-if="!Role.isVisitor()"
+          @open-create-modal="openModalCreate"
+        />
       </div>
     </div>
     <div class="q-pa-md">
@@ -39,6 +42,7 @@
               @click="showModalView(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="edit"
@@ -46,6 +50,7 @@
               @click="showModalEdit(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="delete"
@@ -91,6 +96,7 @@ import { handleError } from 'src/helpers/Errors';
 import DialogEditUser from './components/DialogEditUser.vue';
 import DialogViewUser from './components/DialogViewUser.vue';
 import DialogDeleteUser from './components/DialogDeleteUser.vue';
+import { Role } from 'src/helpers/Role';
 
 const $q = useQuasar();
 

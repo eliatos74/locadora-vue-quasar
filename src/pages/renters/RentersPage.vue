@@ -4,7 +4,10 @@
       <h5>Locatários</h5>
       <div class="css-buttons">
         <SearchInput v-model="textSearch" @search-input="searchRenter" />
-        <ButtonNew @open-create-modal="openCreateModal" />
+        <ButtonNew
+          v-if="!Role.isVisitor()"
+          @open-create-modal="openCreateModal"
+        />
       </div>
     </div>
     <div class="q-pa-md">
@@ -38,6 +41,7 @@
               @click="showModalView(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="edit"
@@ -45,6 +49,7 @@
               @click="showModalEdit(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="delete"
@@ -92,6 +97,7 @@ import DialogDeleteRenter from './components/DialogDeleteRenter.vue';
 import { useQuasar } from 'quasar';
 import SearchInput from 'src/components/SearchInput.vue';
 import ButtonNew from 'src/components/ButtonNew.vue';
+import { Role } from 'src/helpers/Role';
 const $q = useQuasar();
 
 const ModalCreate = ref(false);

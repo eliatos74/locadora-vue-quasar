@@ -6,10 +6,12 @@ const UserAuth = {
   async login(form: AuthLogin) {
     const response = await axios.post('auth/login', form);
     localStorage.setItem('token', response.data.token);
+    localStorage.setItem('role', response.data.role);
   },
 
-  logout() {
+  async logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
   },
 };
 

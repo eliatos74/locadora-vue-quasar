@@ -4,7 +4,6 @@
   </div>
 
   <div class="q-pa-md card-container">
-    <!-- Card Superior -->
     <div class="top-card">
       <q-card class="my-card-top">
         <q-card-section class="ranking-section">
@@ -12,8 +11,6 @@
         </q-card-section>
       </q-card>
     </div>
-
-    <!-- Cartões Inferiores -->
     <div class="bottom-cards">
       <q-card class="my-card-bottom">
         <q-card-section style="height: 450px; width: 614px">
@@ -50,9 +47,7 @@ const BarChart = defineAsyncComponent(
 .top-card {
   display: flex;
   justify-content: center;
-  width: calc(
-    614px * 2 + 20px
-  ); /* Largura combinada dos cartões inferiores e o gap entre eles */
+  width: calc(614px * 2 + 20px);
 }
 
 .bottom-cards {
@@ -74,6 +69,6 @@ const BarChart = defineAsyncComponent(
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around; /* Distribui os elementos em linha */
+  justify-content: space-around;
 }
 </style>

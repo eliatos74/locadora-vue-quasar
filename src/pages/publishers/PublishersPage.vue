@@ -4,7 +4,10 @@
       <h5>Editoras</h5>
       <div class="css-buttons">
         <SearchInput v-model="textSearch" @search-input="searchPublisher" />
-        <ButtonNew @open-create-modal="showModalCreate" />
+        <ButtonNew
+          v-if="!Role.isVisitor()"
+          @open-create-modal="showModalCreate"
+        />
       </div>
     </div>
     <div class="q-pa-md">
@@ -39,6 +42,7 @@
               @click="showModalView(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="edit"
@@ -46,6 +50,7 @@
               @click="showModalEdit(props.row)"
             />
             <q-btn
+              v-if="!Role.isVisitor()"
               flat
               round
               icon="delete"
@@ -97,6 +102,7 @@ import { NotifyMessage } from 'src/helpers/Notify';
 import { QTableProps } from 'quasar';
 
 import { useQuasar } from 'quasar';
+import { Role } from 'src/helpers/Role';
 const $q = useQuasar();
 
 const textSearch = ref<string>('');
@@ -272,6 +278,7 @@ async function loadPublisherScreen() {
 
 onMounted(() => {
   loadPublisherScreen();
+  console.log(localStorage.getItem('role'));
 });
 </script>
 
