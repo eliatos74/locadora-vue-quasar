@@ -11,24 +11,81 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-        <q-btn
-          flat
-          dense
-          round
-          size="lg"
-          icon="logout"
-          aria-label="logout"
-          @click="logoutClick"
-        >
-          <q-tooltip
-            class="bg-red"
-            anchor="center left"
-            self="center right"
-            :offset="[10, 10]"
+        <div style="display: flex; align-items: center">
+          <q-btn
+            flat
+            rounded
+            class="user-btn"
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: var(--q-primary);
+            "
           >
-            Sair do Sistema
-          </q-tooltip>
-        </q-btn>
+            <span style="font-size: 18px; padding: 0px 5px">{{
+              username
+            }}</span>
+            <q-icon
+              v-if="menuOpen == false"
+              name="keyboard_arrow_down"
+              size="lg"
+              @click="toggleMenu"
+            />
+            <q-icon
+              v-if="menuOpen == true"
+              name="keyboard_arrow_up"
+              size="lg"
+              @click="toggleMenu"
+            />
+
+            <q-menu
+              anchor="bottom left"
+              self="top left"
+              @show="menuOpen = true"
+              @hide="menuOpen = false"
+            >
+              <q-list
+                style="
+                  min-width: 200px;
+                  color: var(--q-primary);
+                  font-weight: 550;
+                "
+              >
+                <q-item clickable v-close-popup>
+                  <q-item-section
+                    style="
+                      font-size: 15px;
+                      display: flex;
+                      flex-direction: row;
+                      align-items: center;
+                      gap: 5px;
+                    "
+                  >
+                    Acessar Perfil
+                    <q-icon size="sm" name="perm_identity" />
+                  </q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup @click="logout">
+                  <q-item-section
+                    style="
+                      font-size: 15px;
+                      display: flex;
+                      flex-direction: row;
+                      align-items: center;
+                      gap: 5px;
+                    "
+                  >
+                    Logout
+
+                    <q-icon size="xs" name="logout" />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </div>
       </q-toolbar>
       <div class="linha"></div>
     </q-header>
@@ -62,8 +119,9 @@ import { onMounted, ref } from 'vue';
 
 import MenuSidebar from 'src/components/MenuSidebar.vue';
 import { useRouter } from 'vue-router';
+import { UserAuth } from 'src/api/UserAuthUserApi';
 
-import { UserAuth } from '../api/UserAuthUserApi';
+const username = ref(localStorage.getItem('username') || '');
 
 defineOptions({
   name: 'MainLayout',
@@ -117,7 +175,13 @@ onMounted(() => {
 
 const router = useRouter();
 
-function logoutClick() {
+const menuOpen = ref(false);
+
+function toggleMenu() {
+  menuOpen.value = !menuOpen.value;
+}
+
+function logout() {
   UserAuth.logout();
   router.replace('/login');
 }
@@ -142,5 +206,15 @@ function logoutClick() {
 
 .logo img {
   width: 150px;
+}
+
+.user-btn {
+  color: var(--q-primary);
+  font-size: 18px;
+  font-weight: 500;
+}
+.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
 }
 </style>
