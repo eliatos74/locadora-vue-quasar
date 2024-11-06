@@ -40,8 +40,8 @@
             />
 
             <q-menu
-              anchor="bottom left"
-              self="top left"
+              anchor="bottom middle"
+              self="top middle"
               @show="menuOpen = true"
               @hide="menuOpen = false"
             >
