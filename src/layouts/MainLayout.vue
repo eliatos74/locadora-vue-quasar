@@ -52,7 +52,7 @@
                   font-weight: 550;
                 "
               >
-                <q-item clickable v-close-popup>
+                <q-item clickable v-close-popup @click="goToProfile">
                   <q-item-section
                     style="
                       font-size: 15px;
@@ -164,6 +164,10 @@ const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function goToProfile() {
+  router.push('/profile');
 }
 
 onMounted(() => {

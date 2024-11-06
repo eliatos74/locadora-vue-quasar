@@ -27,9 +27,15 @@
           />
         </div>
         <button id="loginBtn" type="submit">Fazer login</button>
-        <a id="recover_password" href="#" class="forgot-password"
-          >Esqueceu a senha?</a
-        >
+        <q-btn
+          class="forgot-password"
+          dense
+          flat
+          color="white"
+          label="Esqueceu a senha ?"
+          no-caps
+          @click="handleRecoveryPass"
+        />
       </q-form>
     </div>
   </div>
@@ -57,6 +63,10 @@ async function handleSubmit() {
   } catch (error) {
     NotifyMessage.notifyError('Usuário ou senha incorreta!');
   }
+}
+
+async function handleRecoveryPass() {
+  await routes.push('/recoverPassword');
 }
 </script>
 
@@ -138,15 +148,11 @@ button#loginBtn:hover {
   background-color: #218838;
 }
 
-a.forgot-password {
+.forgot-password {
   display: block;
   text-align: center;
   margin-top: 15px;
   color: white;
   text-decoration: none;
-}
-
-a.forgot-password:hover {
-  text-decoration: underline;
 }
 </style>
