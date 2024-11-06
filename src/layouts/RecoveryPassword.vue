@@ -62,8 +62,6 @@ async function sendEmail() {
 const username = ref(localStorage.getItem('username'));
 
 function goToLoginPageOrProfile() {
-  console.log('valor de username: ', username.value);
-
   email.value = '';
   if (username.value === null) {
     router.replace('/login');

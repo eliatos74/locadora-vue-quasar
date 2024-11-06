@@ -273,7 +273,6 @@ function openModalDeliver(rentRow: RentList) {
 }
 
 async function rentDeliver(id: number) {
-  console.log(id);
   await RentApi.deliverRent(id);
   modalWithoutError.value = true;
   NotifyMessage.notifySuccess('Livro entregue com sucesso!');

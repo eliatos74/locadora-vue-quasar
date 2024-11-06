@@ -251,7 +251,6 @@ async function showModalView(bookRow: Book) {
 async function showModalDelete(bookRow: BookInfo) {
   ModalDelete.value = true;
   book.value = bookRow;
-  console.log(book.value);
 }
 
 async function deleteBook(id: number) {
@@ -271,7 +270,6 @@ async function deleteBook(id: number) {
 
 function searchRenter() {
   request.search = textSearch.value;
-  console.log(request);
   getBooks();
 }
 

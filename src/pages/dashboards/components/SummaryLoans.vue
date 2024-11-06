@@ -52,8 +52,6 @@ const pagination = ref({
 async function getRentsList() {
   try {
     const response = await DashboardApi.getRentsRelationList();
-    console.log(response);
-
     rows.value = response.map((item: RentList, index: number) => ({
       ...item,
       index,

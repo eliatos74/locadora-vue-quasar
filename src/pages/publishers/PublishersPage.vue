@@ -278,7 +278,6 @@ async function loadPublisherScreen() {
 
 onMounted(() => {
   loadPublisherScreen();
-  console.log(localStorage.getItem('role'));
 });
 </script>
 

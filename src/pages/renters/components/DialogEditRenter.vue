@@ -158,8 +158,6 @@ function resetForm() {
 
 function submitForm() {
   if (formEdited.value) {
-    console.log();
-
     emit('submit', renter);
   }
 }

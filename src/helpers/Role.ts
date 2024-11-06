@@ -12,7 +12,6 @@ const Role = {
   },
 
   columnActions() {
-    console.log(this.profile);
     return this.profile === 'ADMIN';
   },
 };

@@ -244,7 +244,6 @@ async function deleteUser(id: number) {
 
 function searchUser() {
   request.search = textSearch.value;
-  console.log(request);
   getUsers();
 }
 
