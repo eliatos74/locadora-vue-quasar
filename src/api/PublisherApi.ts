@@ -6,28 +6,28 @@ const PublisherApi = {
   async getPublishersList(
     request: Parameters
   ): Promise<PaginationResponse<Publisher>> {
-    const response = await axios.get('publisher', { params: request });
+    const response = await axios.get('publishers', { params: request });
 
     return response.data;
   },
 
   async getPublisherId(id: number) {
-    const response = await axios.get(`publisher/${id}`);
+    const response = await axios.get(`publishers/${id}`);
     return response.data;
   },
 
   async createPublisher(publisher: Publisher) {
-    const response = await axios.post('publisher', publisher);
+    const response = await axios.post('publishers', publisher);
     return response;
   },
 
   async updatePublisher(publisher: Publisher) {
-    const response = await axios.put('publisher', publisher);
+    const response = await axios.put('publishers', publisher);
     return response.data;
   },
 
   async deletePublisher(id: number) {
-    await axios.delete(`publisher/${id}`);
+    await axios.delete(`publishers/${id}`);
   },
   async getPublisherSelect() {
     const request: Parameters = {
