@@ -12,7 +12,7 @@
             required
             name="username"
             placeholder="Digite seu nome de usuário"
-            v-model="formData.username"
+            v-model="formData.name"
           />
         </div>
         <div class="input-group">
@@ -52,7 +52,7 @@ import { NotifyMessage } from '../helpers/Notify';
 const routes = useRouter();
 
 const formData: AuthLogin = {
-  username: '',
+  name: '',
   password: '',
 };
 

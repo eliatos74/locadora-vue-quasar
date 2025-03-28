@@ -1,4 +1,4 @@
 export interface AuthLogin {
-  username: string;
+  name: string;
   password: string;
 }

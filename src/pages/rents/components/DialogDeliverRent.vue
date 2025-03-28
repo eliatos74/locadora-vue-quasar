@@ -116,7 +116,7 @@ const colorStatus = computed(() => {
     },
     DELIVERED_WITH_DELAY: {
       bgColor: 'red',
-      translatedText: 'Entrgue com Atraso',
+      translatedText: 'Entregue com Atraso',
     },
     DELAYED: {
       bgColor: 'orange',

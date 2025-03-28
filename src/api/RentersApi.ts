@@ -6,23 +6,23 @@ const RenterApi = {
   async getRentersList(
     request: Parameters
   ): Promise<PaginationResponse<Renter>> {
-    const response = await axios.get('renter', { params: request });
+    const response = await axios.get('renters', { params: request });
 
     return response.data;
   },
 
   async createRenter(request: Renter) {
-    await axios.post('renter', request);
+    await axios.post('renters', request);
   },
   async getRenterId(id: number) {
-    const response = await axios.get(`/renter/${id}`);
+    const response = await axios.get(`/renters/${id}`);
     return response;
   },
   async updateRenter(request: Renter) {
-    await axios.put('renter', request);
+    await axios.put('renters', request);
   },
   async deleteRenter(id: number) {
-    await axios.delete(`renter/${id}`);
+    await axios.delete(`renters/${id}`);
   },
   async getRentersSelect() {
     const request: Parameters = {

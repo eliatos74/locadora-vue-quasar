@@ -3,9 +3,9 @@ import { RecoverPassword } from 'src/interfaces/RecoverPassword.interface';
 
 const RecoverApi = {
   async sendEmail(email: string) {
-    const response = await axios.post(
-      `/users/recovery/requestRecoveryMail?email=${encodeURIComponent(email)}`
-    );
+    const response = await axios.post('/users/recovery/requestRecoveryMail', {
+      email,
+    });
     return response;
   },
   async alterPassword(request: RecoverPassword) {

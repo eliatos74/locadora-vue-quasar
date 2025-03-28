@@ -172,7 +172,7 @@ async function getUsers() {
     users.value = response.content;
     modalWithoutError.value = false;
   } catch (error) {
-    NotifyMessage.notifySuccess('Erro ao carregar os usuários');
+    NotifyMessage.notifyError('Erro ao carregar os usuários');
   }
 }
 

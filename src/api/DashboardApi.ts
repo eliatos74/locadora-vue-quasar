@@ -13,12 +13,12 @@ const request: Parameters = {
 
 const DashboardApi = {
   async getRentsRelationList() {
-    const response = await axios.get('rent/renters', { params: request });
+    const response = await axios.get('rents/renters', { params: request });
     return response.data.content;
   },
 
   async getRefundInformation() {
-    const response = await axios.get('rent', { params: request });
+    const response = await axios.get('rents', { params: request });
     const data = response.data.content;
 
     const counters = {
@@ -40,7 +40,7 @@ const DashboardApi = {
     const data: MostRentend[] = [];
 
     for (let i = 0; i < count; i++) {
-      const response = await axios.get(`rent/most-rented/${i + 1}`);
+      const response = await axios.get(`rents/most-rented/${i + 1}`);
       data.push(response.data);
     }
 

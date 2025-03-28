@@ -5,23 +5,23 @@ import { Book } from 'src/interfaces/Books.interface';
 
 const BookApi = {
   async getBooksList(request: Parameters): Promise<PaginationResponse<Book>> {
-    const response = await axios.get('book', { params: request });
+    const response = await axios.get('books', { params: request });
     return response.data;
   },
 
   async createBook(request: Book) {
-    await axios.post('book', request);
+    await axios.post('books', request);
   },
   async getBookId(id: number) {
-    const response = await axios.get(`/book/${id}`);
+    const response = await axios.get(`/books/${id}`);
     return response;
   },
   async updateBook(request: Book) {
-    await axios.put('book', request);
+    await axios.put('books', request);
   },
 
   async deleteBook(id: number) {
-    await axios.delete(`book/${id}`);
+    await axios.delete(`books/${id}`);
   },
   async getBooksSelect() {
     const request: Parameters = {
