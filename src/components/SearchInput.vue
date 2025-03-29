@@ -5,6 +5,7 @@
     label="Pesquisar..."
     outlined
     dense
+    debounce="500"
     style="width: 300px"
     @update:model-value="searchRent"
     class="custom-shadow"
@@ -20,8 +21,8 @@ const emit = defineEmits<{
   (e: 'searchInput', value: string): void;
 }>();
 
-function searchRent() {
-  emit('searchInput', textSearch.value);
+function searchRent(value: string | number | null) {
+  emit('searchInput', value as string);
 }
 </script>
 

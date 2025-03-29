@@ -260,8 +260,8 @@ async function deletePublisher(id: number) {
   }
 }
 
-function searchPublisher() {
-  request.search = textSearch.value;
+function searchPublisher(value: string) {
+  request.search = value;
   getPublishers();
 }
 

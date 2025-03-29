@@ -247,8 +247,8 @@ async function deleteRenter(id: number) {
   }
 }
 
-function searchRenter() {
-  request.search = textSearch.value;
+function searchRenter(value: string) {
+  request.search = value;
   getRenters();
 }
 

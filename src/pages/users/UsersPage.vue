@@ -242,8 +242,8 @@ async function deleteUser(id: number) {
   }
 }
 
-function searchUser() {
-  request.search = textSearch.value;
+function searchUser(value: string) {
+  request.search = value;
   getUsers();
 }
 

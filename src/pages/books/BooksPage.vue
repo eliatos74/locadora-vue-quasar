@@ -268,8 +268,8 @@ async function deleteBook(id: number) {
   }
 }
 
-function searchRenter() {
-  request.search = textSearch.value;
+function searchRenter(value: string) {
+  request.search = value;
   getBooks();
 }
 
